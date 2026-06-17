@@ -1,9 +1,96 @@
 @import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    --font-sans: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+:root {
+    /* Brand */
+    --color-primary: #FA0F00;
+    --color-primary-hover: #E00D00;
+    --color-on-primary: #ffffff;
+
+    /* Surfaces */
+    --color-canvas: #ffffff;
+    --color-surface-1: #F5F5F5;
+    --color-surface-2: #E8E8E8;
+    --color-border: #D3D3D3;
+
+    /* Text */
+    --color-ink: #1B1B1B;
+    --color-ink-muted: #6E6E6E;
+
+    /* Functional */
+    --color-link: #0265DC;
+    --color-success: #008000;
+    --color-warning: #E68600;
+    --color-danger: #FA0F00;
+    --color-info: #0265DC;
+
+    /* Spacing */
+    --space-base: 8px;
+
+    /* Radius */
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 8px;
+    --radius-pill: 9999px;
+
+    /* Shadows */
+    --shadow-card: 0 1px 4px rgba(0,0,0,0.12);
+    --shadow-elevated: 0 4px 16px rgba(0,0,0,0.15);
+
+    /* Motion */
+    --duration-fast: 130ms;
+    --duration-base: 250ms;
+    --easing: cubic-bezier(0.45, 0, 0.40, 1);
+}
+
+body {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
+}
+
+a {
+    color: var(--color-link);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Focus indicator - Accessibility */
+*:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Custom utility classes */
+.card {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+}
+
+.card-elevated {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-elevated);
 }
