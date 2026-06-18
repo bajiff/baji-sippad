@@ -14,11 +14,14 @@
         @yield('content')
     </main>
 
+    @if(!Request::routeIs('landing'))
     <footer class="border-t border-[var(--color-border)] bg-[var(--color-surface-1)] py-6">
         <div class="max-w-7xl mx-auto px-4 text-center text-sm text-[var(--color-ink-muted)]">
             &copy; {{ date('Y') }} SIPPAD — Sistem Pendaftaran Pelatihan Anak Desa
         </div>
     </footer>
+    @endif
+
 
     @stack('scripts')
 </body>

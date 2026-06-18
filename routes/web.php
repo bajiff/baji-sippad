@@ -6,8 +6,25 @@ use Illuminate\Support\Facades\Route;
 
 // Landing Page
 Route::get('/', function () {
-    return view('landing');
+    $categories = \App\Models\KategoriPelatihan::withCount(['pelatihan' => function ($query) {
+        $query->where('status', 'publish');
+    }])->get();
+
+    $latestTrainings = \App\Models\Pelatihan::with(['kategori'])
+        ->where('status', 'publish')
+        ->latest()
+        ->take(3)
+        ->get();
+
+    $stats = [
+        'total_pelatihan' => \App\Models\Pelatihan::whereIn('status', ['publish', 'selesai'])->count(),
+        'total_peserta' => \App\Models\User::where('role', 'user')->count(),
+        'total_sertifikat' => \App\Models\Sertifikat::count(),
+    ];
+
+    return view('landing', compact('categories', 'latestTrainings', 'stats'));
 })->name('landing');
+
 
 // Guest Routes
 Route::middleware('guest')->group(function () {

@@ -3,13 +3,13 @@
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../views/**/*.blade.php';
+
 
 @theme {
     --font-sans: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
-}
 
-:root {
     /* Brand */
     --color-primary: #FA0F00;
     --color-primary-hover: #E00D00;
@@ -51,34 +51,40 @@
     --easing: cubic-bezier(0.45, 0, 0.40, 1);
 }
 
-body {
-    font-family: var(--font-sans);
-    color: var(--color-ink);
-    background-color: var(--color-canvas);
-}
 
-a {
-    color: var(--color-link);
-}
+@layer base {
+    body {
+        font-family: var(--font-sans);
+        color: var(--color-ink);
+        background-color: var(--color-canvas);
+    }
 
-a:hover {
-    text-decoration: underline;
-}
+    a {
+        color: var(--color-link);
+        text-decoration: none;
+        transition: color var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+    }
 
-/* Focus indicator - Accessibility */
-*:focus-visible {
-    outline: 2px solid var(--color-link);
-    outline-offset: 2px;
-}
+    a:hover {
+        text-decoration: underline;
+    }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+    /* Focus indicator - Accessibility */
+    *:focus-visible {
+        outline: 2px solid var(--color-link);
+        outline-offset: 2px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
     }
 }
+
 
 /* Custom utility classes */
 .card {
@@ -86,6 +92,13 @@ a:hover {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
+    transition: all var(--duration-base) var(--easing);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+    border-color: var(--color-ink-muted);
 }
 
 .card-elevated {
@@ -94,3 +107,39 @@ a:hover {
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-elevated);
 }
+
+/* Premium Background Patterns */
+.bg-grid-pattern {
+    background-size: 40px 40px;
+    background-image: 
+        linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+}
+
+.bg-dot-pattern {
+    background-size: 20px 20px;
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+
+/* Animations */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Link transitions */
+a {
+    transition: color var(--duration-fast) var(--easing), border-color var(--duration-fast) var(--easing);
+}
+
+/* Custom indicator offset adjustment */
+*:focus-visible {
+    outline: 2px solid var(--color-link);
+    outline-offset: 2px;
+}
+
