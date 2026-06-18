@@ -17,9 +17,10 @@ class PelatihanController extends Controller
             $query->where('kategori_id', $request->kategori_id);
         }
         if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('judul', 'like', "%{$request->search}%")
-                  ->orWhere('deskripsi', 'like', "%{$request->search}%");
+            $search = strtolower($request->search);
+            $query->where(function ($q) use ($search) {
+                $q->whereRaw('LOWER(judul) LIKE ?', ["%{$search}%"])
+                  ->orWhereRaw('LOWER(deskripsi) LIKE ?', ["%{$search}%"]);
             });
         }
 
