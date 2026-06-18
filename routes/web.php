@@ -6,6 +6,13 @@ use Illuminate\Support\Facades\Route;
 
 // Landing Page
 Route::get('/', function () {
+    if (auth()->check()) {
+        if (auth()->user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('user.dashboard');
+    }
+
     $categories = \App\Models\KategoriPelatihan::withCount(['pelatihan' => function ($query) {
         $query->where('status', 'publish');
     }])->get();

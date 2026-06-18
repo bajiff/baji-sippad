@@ -1,10 +1,18 @@
-<aside class="fixed left-0 top-0 h-full w-64 bg-[var(--color-canvas)] border-r border-[var(--color-border)] z-40 flex flex-col">
-    <div class="h-16 border-b border-[var(--color-border)] flex items-center px-6 gap-2">
+<aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed left-0 top-0 h-full w-64 bg-[var(--color-canvas)] border-r border-[var(--color-border)] z-40 flex flex-col lg:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="h-16 border-b border-[var(--color-border)] flex items-center px-6 gap-2 justify-between">
         <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-1.5 font-bold hover:no-underline">
             <div class="w-6 h-6 bg-[var(--color-primary)] flex items-center justify-center text-white font-black text-sm tracking-tighter rounded-sm">A</div>
             <span class="text-lg tracking-tight text-[var(--color-ink)]">SIPPAD</span>
         </a>
-        <span class="text-xs px-1.5 py-0.5 rounded bg-[var(--color-ink-muted)] text-[var(--color-canvas)] font-semibold uppercase tracking-wider">Admin</span>
+        <div class="flex items-center gap-2">
+            <span class="text-xs px-1.5 py-0.5 rounded bg-[var(--color-ink-muted)] text-[var(--color-canvas)] font-semibold uppercase tracking-wider">Admin</span>
+            <!-- Close Button for Mobile -->
+            <button @click="sidebarOpen = false" class="p-1 rounded hover:bg-[var(--color-surface-2)] text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] lg:hidden transition-colors" title="Tutup Sidebar">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
     </div>
 
     <nav class="flex-1 py-4 overflow-y-auto">
