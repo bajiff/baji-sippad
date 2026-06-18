@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('pendaftaran', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('pelatihan_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('pelatihan_id')->constrained('pelatihan')->cascadeOnDelete();
             $table->date('tanggal_daftar');
             $table->enum('status', ['pending', 'disetujui', 'ditolak'])->default('pending');
             $table->timestamps();

@@ -7,7 +7,7 @@
     <title>@yield('title', 'SIPPAD') — Sistem Pendaftaran Pelatihan Anak Desa</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex flex-col bg-[var(--color-canvas)]">
+<body class="theme-dark min-h-screen flex flex-col bg-[var(--color-canvas)] text-[var(--color-ink)] bg-grid-pattern">
     @include('components.navbar-user')
 
     <main class="flex-1">

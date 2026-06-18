@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('sertifikat', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kehadiran_id')->constrained()->cascadeOnDelete()->unique();
+            $table->foreignId('kehadiran_id')->constrained('kehadiran')->cascadeOnDelete()->unique();
             $table->string('nomor_sertifikat')->unique();
             $table->date('tanggal_terbit');
             $table->timestamps();

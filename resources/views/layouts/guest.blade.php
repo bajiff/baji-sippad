@@ -10,7 +10,10 @@
 <body class="min-h-screen flex items-center justify-center bg-[var(--color-surface-1)]">
     <div class="w-full max-w-md">
         <div class="text-center mb-8">
-            <h1 class="text-2xl font-bold text-[var(--color-ink)]">SIPPAD</h1>
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <div class="w-8 h-8 bg-[var(--color-primary)] flex items-center justify-center text-white font-black text-lg tracking-tighter rounded-sm">A</div>
+                <span class="text-3xl font-bold tracking-tight text-[var(--color-ink)]">SIPPAD</span>
+            </div>
             <p class="text-sm text-[var(--color-ink-muted)] mt-1">Sistem Pendaftaran Pelatihan Anak Desa</p>
         </div>
 

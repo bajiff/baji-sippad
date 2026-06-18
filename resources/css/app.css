@@ -87,6 +87,16 @@
 
 
 /* Custom utility classes */
+.theme-dark {
+    --color-canvas: #1B1B1B;
+    --color-surface-1: #252525;
+    --color-surface-2: #303030;
+    --color-border: #404040;
+    --color-ink: #EBEBEB;
+    --color-ink-muted: #9E9E9E;
+    --color-link: #1473E6; /* Bright Adobe Spectrum link blue for dark mode */
+}
+
 .card {
     background: var(--color-canvas);
     border: 1px solid var(--color-border);
@@ -116,9 +126,19 @@
         linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
 }
 
+.theme-dark .bg-grid-pattern {
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
 .bg-dot-pattern {
     background-size: 20px 20px;
     background-image: radial-gradient(circle, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+}
+
+.theme-dark .bg-dot-pattern {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
 /* Animations */
@@ -141,5 +161,32 @@ a {
 *:focus-visible {
     outline: 2px solid var(--color-link);
     outline-offset: 2px;
+}
+
+/* Badge dark mode overrides */
+.theme-dark .bg-green-50 {
+    background-color: rgba(0, 128, 0, 0.2) !important;
+    color: #4ade80 !important;
+    border-color: rgba(0, 128, 0, 0.4) !important;
+}
+.theme-dark .bg-yellow-50 {
+    background-color: rgba(230, 134, 0, 0.2) !important;
+    color: #facc15 !important;
+    border-color: rgba(230, 134, 0, 0.4) !important;
+}
+.theme-dark .bg-red-50 {
+    background-color: rgba(250, 15, 0, 0.2) !important;
+    color: #fca5a5 !important;
+    border-color: rgba(250, 15, 0, 0.4) !important;
+}
+.theme-dark .bg-blue-50 {
+    background-color: rgba(20, 115, 230, 0.2) !important;
+    color: #93c5fd !important;
+    border-color: rgba(20, 115, 230, 0.4) !important;
+}
+.theme-dark .bg-gray-50 {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #d1d5db !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
 }
 

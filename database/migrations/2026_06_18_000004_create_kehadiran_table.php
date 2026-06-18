@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('kehadiran', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pendaftaran_id')->constrained()->cascadeOnDelete()->unique();
+            $table->foreignId('pendaftaran_id')->constrained('pendaftaran')->cascadeOnDelete()->unique();
             $table->enum('status_kehadiran', ['hadir', 'tidak_hadir'])->default('tidak_hadir');
             $table->timestamps();
         });

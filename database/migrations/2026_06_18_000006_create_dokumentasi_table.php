@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('dokumentasi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pelatihan_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('pelatihan_id')->constrained('pelatihan')->cascadeOnDelete();
             $table->string('foto_kegiatan');
             $table->timestamps();
         });

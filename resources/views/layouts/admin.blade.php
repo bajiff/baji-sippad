@@ -7,7 +7,7 @@
     <title>@yield('title', 'Admin') — SIPPAD</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex bg-[var(--color-surface-1)]">
+<body class="theme-dark min-h-screen flex bg-[var(--color-surface-1)] text-[var(--color-ink)] bg-grid-pattern">
     @include('components.sidebar')
 
     <div class="flex-1 flex flex-col ml-64">

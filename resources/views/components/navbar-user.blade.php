@@ -1,7 +1,8 @@
 <nav class="h-16 border-b border-[var(--color-border)] bg-[var(--color-canvas)] sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
-        <a href="{{ route('landing') }}" class="text-xl font-bold text-[var(--color-ink)] hover:no-underline">
-            SIPPAD
+        <a href="{{ route('landing') }}" class="flex items-center gap-1.5 font-bold hover:no-underline">
+            <div class="w-6 h-6 bg-[var(--color-primary)] flex items-center justify-center text-white font-black text-sm tracking-tighter rounded-sm">A</div>
+            <span class="text-lg tracking-tight text-[var(--color-ink)]">SIPPAD</span>
         </a>
 
         <div class="flex items-center gap-6">
