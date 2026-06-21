@@ -56,10 +56,12 @@
                     </button>
                 </div>
 
+                @include('components.notification-dropdown')
+
                 <span class="text-sm text-[var(--color-ink-muted)] font-medium">{{ Auth::user()->name }}</span>
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('Apakah Anda yakin ingin keluar dari sistem?');">
                     @csrf
-                    <button type="submit" class="text-sm text-[var(--color-ink-muted)] hover:text-[var(--color-danger)] transition-colors">Logout</button>
+                    <button type="submit" class="text-sm text-[var(--color-ink-muted)] hover:text-[var(--color-danger)] transition-colors cursor-pointer">Logout</button>
                 </form>
             </div>
         </header>

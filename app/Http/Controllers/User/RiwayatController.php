@@ -11,7 +11,7 @@ class RiwayatController extends Controller
     {
         $riwayat = Pendaftaran::where('user_id', auth()->id())
             ->where('status', 'disetujui')
-            ->with(['pelatihan.kategori', 'kehadiran.sertifikat'])
+            ->with(['pelatihan.kategori', 'pelatihan.dokumentasi', 'kehadiran.sertifikat'])
             ->latest()
             ->paginate(10);
 

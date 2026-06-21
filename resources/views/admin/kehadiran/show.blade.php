@@ -1,9 +1,29 @@
 @extends('layouts.admin')
 
-@section('title', 'Absensi - ' . $pelatihan->judul)
-@section('header', 'Absensi: ' . $pelatihan->judul)
+@section('title', 'Presensi - ' . $pelatihan->judul)
+@section('header', 'Presensi: ' . $pelatihan->judul)
 
 @section('content')
+<div class="card p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+        <h4 class="font-medium text-[var(--color-ink)]">Metode Presensi Pelatihan</h4>
+        <p class="text-xs text-[var(--color-ink-muted)]">Tentukan siapa yang dapat mencatatkan presensi kehadiran peserta.</p>
+    </div>
+    <form method="POST" action="{{ route('admin.kehadiran.toggleMode', $pelatihan) }}" class="flex items-center gap-2">
+        @csrf @method('PATCH')
+        <div class="inline-flex rounded-md shadow-sm" role="group">
+            <button type="submit" name="presensi_by" value="admin" 
+                class="px-4 py-2 text-xs font-semibold rounded-l-md border {{ $pelatihan->presensi_by === 'admin' ? 'bg-[var(--color-primary)] text-[var(--color-on-primary)] border-[var(--color-primary)]' : 'bg-[var(--color-canvas)] text-[var(--color-ink-muted)] border-[var(--color-border)] hover:bg-[var(--color-surface-1)]' }} transition-colors">
+                Oleh Admin
+            </button>
+            <button type="submit" name="presensi_by" value="peserta" 
+                class="px-4 py-2 text-xs font-semibold rounded-r-md border {{ $pelatihan->presensi_by === 'peserta' ? 'bg-[var(--color-primary)] text-[var(--color-on-primary)] border-[var(--color-primary)]' : 'bg-[var(--color-canvas)] text-[var(--color-ink-muted)] border-[var(--color-border)] hover:bg-[var(--color-surface-1)]' }} border-l-0 transition-colors">
+                Oleh Peserta Mandiri
+            </button>
+        </div>
+    </form>
+</div>
+
 <div class="card overflow-hidden">
     <table class="w-full text-sm">
         <thead class="bg-[var(--color-surface-1)]">
@@ -27,7 +47,7 @@
                                 <x-badge variant="danger">Tidak Hadir</x-badge>
                             @endif
                         @else
-                            <x-badge variant="default">Belum Diabsen</x-badge>
+                            <x-badge variant="default">Belum Presensi</x-badge>
                         @endif
                     </td>
                     <td class="px-4 py-3 text-right">

@@ -5,16 +5,25 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Pelatihan;
 use App\Models\Pendaftaran;
+use App\Services\PendaftaranService;
 use Illuminate\Http\Request;
+use Exception;
 
 class PendaftaranController extends Controller
 {
+    protected $pendaftaranService;
+
+    public function __construct(PendaftaranService $pendaftaranService)
+    {
+        $this->pendaftaranService = $pendaftaranService;
+    }
+
     public function index()
     {
         $pendaftarans = Pendaftaran::where('user_id', auth()->id())
-            ->with('pelatihan.kategori')
-            ->latest()
-            ->paginate(10);
+             ->with('pelatihan.kategori')
+             ->latest()
+             ->paginate(10);
 
         return view('user.pendaftaran.index', compact('pendaftarans'));
     }
@@ -23,33 +32,41 @@ class PendaftaranController extends Controller
     {
         $user = auth()->user();
 
-        // Check if already registered
-        $existing = Pendaftaran::where('user_id', $user->id)
-            ->where('pelatihan_id', $pelatihan->id)
-            ->first();
+        try {
+            $this->pendaftaranService->daftar($user, $pelatihan);
 
-        if ($existing) {
-            return redirect()->back()->with('error', 'Anda sudah terdaftar di pelatihan ini.');
+            return redirect()->route('user.pendaftaran.index')
+                ->with('success', 'Pendaftaran berhasil! Menunggu verifikasi dari admin.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function presensiMandiri(Pendaftaran $pendaftaran)
+    {
+        if ($pendaftaran->user_id !== auth()->id()) {
+            abort(403);
         }
 
-        // Check if pelatihan is open
-        if ($pelatihan->status !== 'publish') {
-            return redirect()->back()->with('error', 'Pelatihan ini belum dibuka atau sudah ditutup.');
+        if ($pendaftaran->status !== 'disetujui') {
+            return redirect()->back()->with('error', 'Pendaftaran Anda belum disetujui.');
         }
 
-        // Check kuota
-        if ($pelatihan->isFull()) {
-            return redirect()->back()->with('error', 'Kuota pelatihan sudah penuh.');
+        $pelatihan = $pendaftaran->pelatihan;
+        if (!in_array($pelatihan->status, ['publish', 'selesai'])) {
+            return redirect()->back()->with('error', 'Pelatihan belum aktif atau sudah ditutup.');
         }
 
-        Pendaftaran::create([
-            'user_id' => $user->id,
-            'pelatihan_id' => $pelatihan->id,
-            'tanggal_daftar' => now()->toDateString(),
-            'status' => 'pending',
-        ]);
+        if ($pelatihan->presensi_by !== 'peserta') {
+            return redirect()->back()->with('error', 'Presensi mandiri dinonaktifkan oleh admin.');
+        }
 
-        return redirect()->route('user.pendaftaran.index')
-            ->with('success', 'Pendaftaran berhasil! Menunggu verifikasi dari admin.');
+        \App\Models\Kehadiran::updateOrCreate(
+            ['pendaftaran_id' => $pendaftaran->id],
+            ['status_kehadiran' => 'hadir']
+        );
+
+        return redirect()->back()->with('success', 'Presensi kehadiran Anda berhasil dicatat.');
     }
 }
+

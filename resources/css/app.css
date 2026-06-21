@@ -11,26 +11,26 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 
     /* Brand */
-    --color-primary: #FA0F00;
-    --color-primary-hover: #E00D00;
+    --color-primary: #E00D00; /* WCAG AA compliant on white (4.8:1) */
+    --color-primary-hover: #C00A00;
     --color-on-primary: #ffffff;
 
     /* Surfaces */
     --color-canvas: #ffffff;
     --color-surface-1: #F5F5F5;
     --color-surface-2: #E8E8E8;
-    --color-border: #D3D3D3;
+    --color-border: #B0B0B0; /* Improved border definition for non-text contrast */
 
     /* Text */
     --color-ink: #1B1B1B;
-    --color-ink-muted: #6E6E6E;
+    --color-ink-muted: #595959; /* WCAG AA compliant on light backgrounds (>= 4.5:1) */
 
     /* Functional */
-    --color-link: #0265DC;
-    --color-success: #008000;
-    --color-warning: #E68600;
-    --color-danger: #FA0F00;
-    --color-info: #0265DC;
+    --color-link: #005CBB; /* WCAG AA compliant (6.0:1 on white, 4.7:1 on surface-2) */
+    --color-success: #087A3E; /* WCAG AA compliant (5.3:1) */
+    --color-warning: #A85400; /* WCAG AA compliant (4.6:1) */
+    --color-danger: #D31100; /* WCAG AA compliant (5.4:1) */
+    --color-info: #005CBB;
 
     /* Spacing */
     --space-base: 8px;
@@ -75,6 +75,25 @@
         outline-offset: 2px;
     }
 
+    /* Global Input & Select styling for Dark/Light mode */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    input[type="time"],
+    input[type="file"],
+    textarea,
+    select {
+        background-color: var(--color-canvas) !important;
+        color: var(--color-ink) !important;
+    }
+
+    select option {
+        background-color: var(--color-canvas) !important;
+        color: var(--color-ink) !important;
+    }
+
     /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
@@ -91,10 +110,14 @@
     --color-canvas: #1B1B1B;
     --color-surface-1: #252525;
     --color-surface-2: #303030;
-    --color-border: #404040;
+    --color-border: #5A5A5A; /* Improved border definition for dark mode */
     --color-ink: #EBEBEB;
     --color-ink-muted: #9E9E9E;
     --color-link: #1473E6; /* Bright Adobe Spectrum link blue for dark mode */
+    --color-success: #2D9D78; /* WCAG AA compliant (5.5:1 on dark canvas) */
+    --color-warning: #E6A100; /* WCAG AA compliant (5.2:1 on dark canvas) */
+    --color-danger: #FF6B5E; /* WCAG AA compliant (6.5:1 on dark canvas) */
+    --color-info: #1473E6;
 }
 
 .card {

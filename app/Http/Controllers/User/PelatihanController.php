@@ -11,7 +11,7 @@ class PelatihanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Pelatihan::where('status', 'publish')->with('kategori');
+        $query = Pelatihan::whereIn('status', ['publish', 'closed'])->with('kategori');
 
         if ($request->filled('kategori_id')) {
             $query->where('kategori_id', $request->kategori_id);
@@ -32,10 +32,13 @@ class PelatihanController extends Controller
 
     public function show(Pelatihan $pelatihan)
     {
-        $pelatihan->load('kategori');
+        $pelatihan->load('kategori')->loadCount(['pendaftaran as approved_pendaftaran_count' => function ($query) {
+            $query->where('status', 'disetujui');
+        }]);
 
         $userPendaftaran = auth()->user()->pendaftaran()
             ->where('pelatihan_id', $pelatihan->id)
+            ->with('kehadiran')
             ->first();
 
         return view('user.pelatihan.show', compact('pelatihan', 'userPendaftaran'));

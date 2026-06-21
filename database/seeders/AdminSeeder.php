@@ -16,6 +16,7 @@ class AdminSeeder extends Seeder
                 'name' => 'Administrator',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
+                'is_superadmin' => true,
                 'no_hp' => '081234567890',
                 'alamat' => 'Jl. Pusat No. 1, Jakarta',
             ]

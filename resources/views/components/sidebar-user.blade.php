@@ -39,6 +39,13 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('user.sertifikat.index') }}"
+                   class="flex items-center gap-3 px-3 py-2.5 rounded text-sm transition-colors {{ request()->routeIs('user.sertifikat.*') ? 'bg-[var(--color-surface-2)] text-[var(--color-ink)] font-medium' : 'text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-1)] hover:text-[var(--color-ink)]' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 00.806 1.946 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                    Sertifikat Saya
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('user.profil') }}"
                    class="flex items-center gap-3 px-3 py-2.5 rounded text-sm transition-colors {{ request()->routeIs('user.profil') ? 'bg-[var(--color-surface-2)] text-[var(--color-ink)] font-medium' : 'text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-1)] hover:text-[var(--color-ink)]' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -49,7 +56,7 @@
     </nav>
 
     <div class="p-4 border-t border-[var(--color-border)]">
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('Apakah Anda yakin ingin keluar dari sistem?');">
             @csrf
             <button type="submit" class="flex items-center gap-3 px-3 py-2.5 rounded text-sm text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-1)] hover:text-[var(--color-danger)] transition-colors w-full">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>

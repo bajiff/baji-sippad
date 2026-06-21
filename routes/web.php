@@ -18,7 +18,7 @@ Route::get('/', function () {
     }])->get();
 
     $latestTrainings = \App\Models\Pelatihan::with(['kategori'])
-        ->where('status', 'publish')
+        ->whereIn('status', ['publish', 'closed'])
         ->latest()
         ->take(3)
         ->get();
@@ -41,11 +41,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [RegisterController::class, 'register']);
 });
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+Route::match(['get', 'post'], '/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // Accounts
+    Route::resource('accounts', \App\Http\Controllers\Admin\AccountController::class);
 
     // Kategori
     Route::resource('kategori', \App\Http\Controllers\Admin\KategoriController::class);
@@ -63,6 +66,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('kehadiran', [\App\Http\Controllers\Admin\KehadiranController::class, 'index'])->name('kehadiran.index');
     Route::get('kehadiran/{pelatihan}', [\App\Http\Controllers\Admin\KehadiranController::class, 'show'])->name('kehadiran.show');
     Route::patch('kehadiran/{pendaftaran}', [\App\Http\Controllers\Admin\KehadiranController::class, 'update'])->name('kehadiran.update');
+    Route::patch('kehadiran/{pelatihan}/toggle-mode', [\App\Http\Controllers\Admin\KehadiranController::class, 'toggleMode'])->name('kehadiran.toggleMode');
 
     // Dokumentasi
     Route::resource('dokumentasi', \App\Http\Controllers\Admin\DokumentasiController::class)->except(['show']);
@@ -70,6 +74,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Sertifikat
     Route::get('sertifikat', [\App\Http\Controllers\Admin\SertifikatController::class, 'index'])->name('sertifikat.index');
     Route::post('sertifikat/generate/{pelatihan}', [\App\Http\Controllers\Admin\SertifikatController::class, 'generate'])->name('sertifikat.generate');
+    Route::get('sertifikat/pelatihan/{pelatihan}', [\App\Http\Controllers\Admin\SertifikatController::class, 'showPelatihan'])->name('sertifikat.pelatihan.show');
+    Route::post('sertifikat/generate-bulk/{pelatihan}', [\App\Http\Controllers\Admin\SertifikatController::class, 'generateBulk'])->name('sertifikat.generate.bulk');
+    Route::post('sertifikat/revoke-bulk/{pelatihan}', [\App\Http\Controllers\Admin\SertifikatController::class, 'revokeBulk'])->name('sertifikat.revoke.bulk');
+    Route::get('sertifikat/{sertifikat}/download', [\App\Http\Controllers\Admin\SertifikatController::class, 'download'])->name('sertifikat.download');
 
     // Laporan
     Route::get('laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan.index');
@@ -87,6 +95,7 @@ Route::middleware(['auth', 'user'])->prefix('user')->name('user.')->group(functi
     // Pendaftaran
     Route::post('pendaftaran/{pelatihan}', [\App\Http\Controllers\User\PendaftaranController::class, 'store'])->name('pendaftaran.store');
     Route::get('pendaftaran-saya', [\App\Http\Controllers\User\PendaftaranController::class, 'index'])->name('pendaftaran.index');
+    Route::post('pendaftaran/{pendaftaran}/presensi', [\App\Http\Controllers\User\PendaftaranController::class, 'presensiMandiri'])->name('pendaftaran.presensi');
 
     // Riwayat
     Route::get('riwayat', [\App\Http\Controllers\User\RiwayatController::class, 'index'])->name('riwayat');
@@ -96,5 +105,12 @@ Route::middleware(['auth', 'user'])->prefix('user')->name('user.')->group(functi
     Route::patch('profil', [\App\Http\Controllers\User\ProfilController::class, 'update'])->name('profil.update');
 
     // Sertifikat
+    Route::get('sertifikat', [\App\Http\Controllers\User\SertifikatController::class, 'index'])->name('sertifikat.index');
     Route::get('sertifikat/{sertifikat}/download', [\App\Http\Controllers\User\SertifikatController::class, 'download'])->name('sertifikat.download');
+});
+
+// Notification Routes
+Route::middleware('auth')->group(function () {
+    Route::post('notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'readAll'])->name('notifications.readAll');
+    Route::post('notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'read'])->name('notifications.read');
 });

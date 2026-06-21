@@ -28,4 +28,15 @@ class Sertifikat extends Model
     {
         return $this->belongsTo(Kehadiran::class);
     }
+
+    protected static function booted()
+    {
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('landing_stats');
+        });
+
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('landing_stats');
+        });
+    }
 }

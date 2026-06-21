@@ -12,7 +12,7 @@ class KehadiranController extends Controller
 {
     public function index()
     {
-        $pelatihans = Pelatihan::where('status', 'selesai')
+        $pelatihans = Pelatihan::whereIn('status', ['publish', 'selesai', 'closed'])
             ->withCount(['pendaftaran' => fn($q) => $q->where('status', 'disetujui')])
             ->with('kategori')
             ->latest()
@@ -43,5 +43,18 @@ class KehadiranController extends Controller
         );
 
         return redirect()->back()->with('success', 'Kehadiran berhasil diperbarui.');
+    }
+
+    public function toggleMode(Request $request, Pelatihan $pelatihan)
+    {
+        $validated = $request->validate([
+            'presensi_by' => 'required|in:admin,peserta',
+        ]);
+
+        $pelatihan->update([
+            'presensi_by' => $validated['presensi_by']
+        ]);
+
+        return redirect()->back()->with('success', 'Metode presensi berhasil diperbarui.');
     }
 }

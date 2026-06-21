@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\KategoriPelatihan;
 use App\Models\Pelatihan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PelatihanController extends Controller
 {
@@ -37,9 +38,14 @@ class PelatihanController extends Controller
             'kuota' => 'nullable|integer|min:1',
             'persyaratan' => 'nullable|string',
             'sertifikat_enabled' => 'boolean',
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $validated['sertifikat_enabled'] = $request->boolean('sertifikat_enabled');
+
+        if ($request->hasFile('thumbnail')) {
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
 
         Pelatihan::create($validated);
 
@@ -65,17 +71,32 @@ class PelatihanController extends Controller
             'kuota' => 'nullable|integer|min:1',
             'persyaratan' => 'nullable|string',
             'sertifikat_enabled' => 'boolean',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $validated['sertifikat_enabled'] = $request->boolean('sertifikat_enabled');
 
+        if ($request->hasFile('thumbnail')) {
+            if ($pelatihan->thumbnail) {
+                Storage::disk('public')->delete($pelatihan->thumbnail);
+            }
+            $validated['thumbnail'] = $request->file('thumbnail')->store('thumbnails', 'public');
+        }
+
         $pelatihan->update($validated);
+
+        if ($pelatihan->isFull() && $pelatihan->status === 'publish') {
+            $pelatihan->update(['status' => 'closed']);
+        }
 
         return redirect()->route('admin.pelatihan.index')->with('success', 'Pelatihan berhasil diperbarui.');
     }
 
     public function destroy(Pelatihan $pelatihan)
     {
+        if ($pelatihan->thumbnail) {
+            Storage::disk('public')->delete($pelatihan->thumbnail);
+        }
         $pelatihan->delete();
         return redirect()->route('admin.pelatihan.index')->with('success', 'Pelatihan berhasil dihapus.');
     }

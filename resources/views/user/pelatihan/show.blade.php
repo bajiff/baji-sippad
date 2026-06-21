@@ -56,6 +56,25 @@
                 @elseif($userPendaftaran->status === 'disetujui')
                     <div class="flex items-center gap-3">
                         <x-badge variant="success">Pendaftaran Anda: Disetujui</x-badge>
+                        @if((!$userPendaftaran->kehadiran || $userPendaftaran->kehadiran->status_kehadiran !== 'hadir') && in_array($pelatihan->status, ['publish', 'selesai']) && $pelatihan->presensi_by === 'peserta')
+                            <div class="flex items-center gap-2">
+                                @if($userPendaftaran->kehadiran && $userPendaftaran->kehadiran->status_kehadiran === 'tidak_hadir')
+                                    <x-badge variant="danger">Kehadiran: Tidak Hadir</x-badge>
+                                @endif
+                                <form method="POST" action="{{ route('user.pendaftaran.presensi', $userPendaftaran) }}">
+                                    @csrf
+                                    <button type="submit" class="px-3 py-1 bg-[var(--color-primary)] text-white rounded text-xs font-medium hover:bg-[var(--color-primary-hover)] transition-colors">
+                                        Presensi Mandiri
+                                    </button>
+                                </form>
+                            </div>
+                        @elseif($userPendaftaran->kehadiran)
+                            @if($userPendaftaran->kehadiran->status_kehadiran === 'hadir')
+                                <x-badge variant="success">Kehadiran: Hadir</x-badge>
+                            @else
+                                <x-badge variant="danger">Kehadiran: Tidak Hadir</x-badge>
+                            @endif
+                        @endif
                     </div>
                 @else
                     <div class="flex items-center gap-3">
@@ -65,9 +84,9 @@
             @else
                 <form method="POST" action="{{ route('user.pendaftaran.store', $pelatihan) }}">
                     @csrf
-                    <button type="submit" {{ $pelatihan->isFull() ? 'disabled' : '' }}
+                    <button type="submit" {{ $pelatihan->isFull() || $pelatihan->status === 'closed' ? 'disabled' : '' }}
                             class="px-6 py-2.5 bg-[var(--color-primary)] text-[var(--color-on-primary)] rounded font-medium text-sm hover:bg-[var(--color-primary-hover)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                        {{ $pelatihan->isFull() ? 'Kuota Penuh' : 'Daftar Pelatihan Ini' }}
+                        {{ $pelatihan->isFull() || $pelatihan->status === 'closed' ? 'Sudah Penuh' : 'Daftar Pelatihan Ini' }}
                     </button>
                 </form>
             @endif

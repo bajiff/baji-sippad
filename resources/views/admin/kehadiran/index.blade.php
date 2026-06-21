@@ -23,11 +23,11 @@
                     <td class="px-4 py-3">{{ $p->tanggal->format('d M Y') }}</td>
                     <td class="px-4 py-3">{{ $p->pendaftaran_count }}</td>
                     <td class="px-4 py-3 text-right">
-                        <a href="{{ route('admin.kehadiran.show', $p) }}" class="text-[var(--color-link)] hover:underline text-sm">Kelola Absensi</a>
+                        <a href="{{ route('admin.kehadiran.show', $p) }}" class="text-[var(--color-link)] hover:underline text-sm">Kelola Presensi</a>
                     </td>
                 </tr>
             @empty
-                <tr><td colspan="5" class="px-4 py-8 text-center text-[var(--color-ink-muted)]">Belum ada pelatihan selesai</td></tr>
+                <tr><td colspan="5" class="px-4 py-8 text-center text-[var(--color-ink-muted)]">Belum ada pelatihan aktif atau selesai</td></tr>
             @endforelse
         </tbody>
     </table>

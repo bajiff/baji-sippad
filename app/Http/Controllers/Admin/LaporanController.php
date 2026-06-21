@@ -4,66 +4,82 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pelatihan;
+use App\Services\LaporanService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class LaporanController extends Controller
 {
+    protected $laporanService;
+
+    public function __construct(LaporanService $laporanService)
+    {
+        $this->laporanService = $laporanService;
+    }
+
     public function index(Request $request)
     {
-        $query = Pelatihan::with('kategori');
-
-        if ($request->filled('tahun')) {
-            $query->whereYear('tanggal', $request->tahun);
-        }
-        if ($request->filled('bulan')) {
-            $query->whereMonth('tanggal', $request->bulan);
-        }
-        if ($request->filled('kategori_id')) {
-            $query->where('kategori_id', $request->kategori_id);
-        }
-
-        $pelatihans = $query->withCount([
-            'pendaftaran',
-            'pendaftaran as disetujui_count' => fn($q) => $q->where('status', 'disetujui'),
-            'pendaftaran as ditolak_count' => fn($q) => $q->where('status', 'ditolak'),
-            'pendaftaran as pending_count' => fn($q) => $query->where('status', 'pending'),
-        ])->latest('tanggal')->paginate(15);
+        $pelatihans = $this->laporanService->getLaporanPaginated($request->only(['tahun', 'bulan', 'kategori_id']));
 
         return view('admin.laporan.index', compact('pelatihans'));
     }
 
     public function export(Request $request, string $format)
     {
-        $pelatihans = Pelatihan::with(['kategori', 'pendaftaran.user', 'pendaftaran.kehadiran'])
-            ->latest('tanggal')
-            ->get();
-
-        $data = $pelatihans->map(function ($p) {
-            return [
-                'Pelatihan' => $p->judul,
-                'Kategori' => $p->kategori->nama_kategori,
-                'Tanggal' => $p->tanggal->format('d/m/Y'),
-                'Total Pendaftar' => $p->pendaftaran->count(),
-                'Disetujui' => $p->pendaftaran->where('status', 'disetujui')->count(),
-                'Ditolak' => $p->pendaftaran->where('status', 'ditolak')->count(),
-                'Hadir' => $p->pendaftaran->filter(fn($p) => $p->kehadiran && $p->kehadiran->status_kehadiran === 'hadir')->count(),
-            ];
-        });
+        $filters = $request->only(['tahun', 'bulan', 'kategori_id']);
 
         if ($format === 'csv') {
-            $headers = ['Content-Type' => 'text/csv'];
+            $data = $this->laporanService->getExportData($filters);
+            $headers = [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="laporan-pelatihan.csv"',
+            ];
             $callback = function () use ($data) {
                 $handle = fopen('php://output', 'w');
-                fputcsv($handle, array_keys($data->first()));
-                foreach ($data as $row) {
-                    fputcsv($handle, $row);
+                if ($data->isNotEmpty()) {
+                    fputcsv($handle, array_keys($data->first()));
+                    foreach ($data as $row) {
+                        fputcsv($handle, $row);
+                    }
                 }
                 fclose($handle);
             };
-            return Response::stream($callback, 200, $headers, 'laporan-pelatihan.csv');
+            return Response::stream($callback, 200, $headers);
+        }
+
+        if ($format === 'xlsx') {
+            $pelatihans = $this->laporanService->getLaporanData($filters);
+
+            $totalPelatihan = $pelatihans->count();
+            $totalPendaftar = 0;
+            $totalDisetujui = 0;
+            $totalHadir = 0;
+
+            foreach ($pelatihans as $p) {
+                $totalPendaftar += $p->pendaftaran->count();
+                $totalDisetujui += $p->pendaftaran->where('status', 'disetujui')->count();
+                $totalHadir += $p->pendaftaran->filter(fn($pendaftar) => $pendaftar->kehadiran && $pendaftar->kehadiran->status_kehadiran === 'hadir')->count();
+            }
+
+            return \Maatwebsite\Excel\Facades\Excel::download(
+                new \App\Exports\LaporanExport(
+                    $pelatihans,
+                    $filters,
+                    $totalPelatihan,
+                    $totalPendaftar,
+                    $totalDisetujui,
+                    $totalHadir
+                ),
+                'laporan-pelatihan.xlsx'
+            );
+        }
+
+        if ($format === 'pdf') {
+            $pdf = $this->laporanService->generatePdf($filters);
+            return $pdf->download('laporan-pelatihan.pdf');
         }
 
         return redirect()->route('admin.laporan.index')->with('error', 'Format export belum tersedia.');
     }
 }
+

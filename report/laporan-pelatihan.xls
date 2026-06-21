@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40" lang="id">
+<head>
+    <meta charset="UTF-8">
+    <!--[if gte mso 9]>
+    <xml>
+        <x:ExcelWorkbook>
+            <x:ExcelWorksheets>
+                <x:ExcelWorksheet>
+                    <x:Name>Laporan Pelatihan SIPPAD</x:Name>
+                    <x:WorksheetOptions>
+                        <x:DisplayGridlines/>
+                    </x:WorksheetOptions>
+                </x:ExcelWorksheet>
+            </x:ExcelWorksheets>
+        </x:ExcelWorkbook>
+    </xml>
+    <![endif]-->
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        .title {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 16pt;
+            font-weight: bold;
+            color: #1e3a8a;
+        }
+        .subtitle {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 10pt;
+            color: #4b5563;
+        }
+        .meta-info {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 9pt;
+            color: #6b7280;
+        }
+        .stats-label {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 9pt;
+            font-weight: bold;
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            padding: 6px;
+            text-align: center;
+        }
+        .stats-value {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 12pt;
+            font-weight: bold;
+            color: #059669;
+            background-color: #f9fafb;
+            border: 1px solid #d1d5db;
+            padding: 6px;
+            text-align: center;
+        }
+        th {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 10pt;
+            background-color: #059669; /* Emerald Green */
+            color: #ffffff;
+            font-weight: bold;
+            border: 1px solid #d1d5db;
+            padding: 8px 6px;
+            text-align: left;
+        }
+        td {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 9.5pt;
+            border: 1px solid #d1d5db;
+            padding: 6px;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .total-row td {
+            font-weight: bold;
+            background-color: #e5e7eb;
+            border-top: 2px solid #9ca3af;
+            border-bottom: 2px double #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <table>
+        <tr>
+            <td colspan="8" class="title">LAPORAN PERKEMBANGAN PELATIHAN</td>
+        </tr>
+        <tr>
+            <td colspan="8" class="subtitle">Sistem Pendaftaran Pelatihan Anak Desa (SIPPAD) · Desa Sari Mukti</td>
+        </tr>
+        <tr>
+            <td colspan="8" class="meta-info">
+                <strong>Tanggal Cetak:</strong> 18 June 2026 13:42 WIB | 
+                <strong>Filter:</strong> 
+                                Semua Data
+            </td>
+        </tr>
+        <!-- Empty row for spacing -->
+        <tr><td colspan="8"></td></tr>
+    </table>
+
+    <!-- Ringkasan Statistik -->
+    <table>
+        <tr>
+            <td colspan="2" class="stats-label">Total Pelatihan</td>
+            <td colspan="2" class="stats-label">Total Pendaftar</td>
+            <td colspan="2" class="stats-label">Peserta Disetujui</td>
+            <td colspan="2" class="stats-label">Peserta Hadir</td>
+        </tr>
+        <tr>
+            <td colspan="2" class="stats-value">5</td>
+            <td colspan="2" class="stats-value">0</td>
+            <td colspan="2" class="stats-value">0</td>
+            <td colspan="2" class="stats-value">0</td>
+        </tr>
+        <!-- Empty row for spacing -->
+        <tr><td colspan="8"></td></tr>
+    </table>
+
+    <!-- Data Table -->
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 50px;" class="text-center">No</th>
+                <th style="width: 250px;">Judul Pelatihan</th>
+                <th style="width: 150px;">Kategori</th>
+                <th style="width: 100px;">Tanggal</th>
+                <th style="width: 80px;" class="text-center">Pendaftar</th>
+                <th style="width: 80px;" class="text-center">Disetujui</th>
+                <th style="width: 80px;" class="text-center">Hadir</th>
+                <th style="width: 80px;" class="text-center">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+                                            <tr>
+                    <td class="text-center">1</td>
+                    <td style="font-weight: bold;">Digital Marketing untuk Destinasi Wisata Desa</td>
+                    <td>Pariwisata</td>
+                    <td>10/08/2026</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center" style="text-transform: capitalize;">selesai</td>
+                </tr>
+                                            <tr>
+                    <td class="text-center">2</td>
+                    <td style="font-weight: bold;">Pertanian Organik untuk Pemula</td>
+                    <td>Pertanian</td>
+                    <td>01/08/2026</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center" style="text-transform: capitalize;">selesai</td>
+                </tr>
+                                            <tr>
+                    <td class="text-center">3</td>
+                    <td style="font-weight: bold;">Membuat Business Plan yang Menarik Investor</td>
+                    <td>Kewirausahaan</td>
+                    <td>20/07/2026</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center" style="text-transform: capitalize;">publish</td>
+                </tr>
+                                            <tr>
+                    <td class="text-center">4</td>
+                    <td style="font-weight: bold;">Dasar Pemrograman Web dengan Laravel</td>
+                    <td>Teknologi Informasi</td>
+                    <td>15/07/2026</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center" style="text-transform: capitalize;">publish</td>
+                </tr>
+                                            <tr>
+                    <td class="text-center">5</td>
+                    <td style="font-weight: bold;">Pola Hidup Sehat untuk Lansia</td>
+                    <td>Kesehatan</td>
+                    <td>25/06/2026</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center" style="text-transform: capitalize;">selesai</td>
+                </tr>
+                        
+            <!-- Summary Row -->
+                            <tr class="total-row">
+                    <td colspan="4" class="text-right">TOTAL</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td class="text-center">0</td>
+                    <td></td>
+                </tr>
+                    </tbody>
+    </table>
+</body>
+</html>

@@ -25,7 +25,9 @@
             </select>
         </div>
         <button type="submit" class="px-4 py-2 bg-[var(--color-surface-2)] text-[var(--color-ink)] rounded text-sm font-medium hover:bg-[var(--color-border)]">Filter</button>
-        <a href="{{ route('admin.laporan.export', 'csv') }}" class="px-4 py-2 bg-[var(--color-success)] text-white rounded text-sm font-medium hover:bg-green-700">Export CSV</a>
+        <a href="{{ route('admin.laporan.export', array_merge(['format' => 'xlsx'], request()->query())) }}" class="px-4 py-2 bg-emerald-600 text-white rounded text-sm font-medium hover:bg-emerald-700">Export Excel</a>
+        <a href="{{ route('admin.laporan.export', array_merge(['format' => 'csv'], request()->query())) }}" class="px-4 py-2 bg-[var(--color-success)] text-white rounded text-sm font-medium hover:bg-green-700">Export CSV</a>
+        <a href="{{ route('admin.laporan.export', array_merge(['format' => 'pdf'], request()->query())) }}" class="px-4 py-2 bg-[var(--color-danger)] text-white rounded text-sm font-medium hover:bg-red-700">Export PDF</a>
     </form>
 </div>
 

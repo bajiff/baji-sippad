@@ -6,6 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'SIPPAD') — Sistem Pendaftaran Pelatihan Anak Desa</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('theme-dark');
+        } else {
+            document.documentElement.classList.remove('theme-dark');
+        }
+    </script>
 </head>
 <body class="min-h-screen flex flex-col">
     @include('components.navbar')

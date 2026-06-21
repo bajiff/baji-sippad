@@ -21,8 +21,10 @@ class Pelatihan extends Model
         'jam',
         'kuota',
         'persyaratan',
+        'thumbnail',
         'status',
         'sertifikat_enabled',
+        'presensi_by',
     ];
 
     protected function casts(): array
@@ -54,16 +56,47 @@ class Pelatihan extends Model
         if ($this->kuota === null) {
             return false;
         }
-        return $this->pendaftaran()->where('status', 'disetujui')->count() >= $this->kuota;
+        return $this->approved_count >= $this->kuota;
     }
 
     public function getApprovedCountAttribute(): int
     {
+        if (array_key_exists('approved_pendaftaran_count', $this->attributes)) {
+            return (int) $this->attributes['approved_pendaftaran_count'];
+        }
+
+        if ($this->relationLoaded('pendaftaran')) {
+            return $this->pendaftaran->where('status', 'disetujui')->count();
+        }
+
         return $this->pendaftaran()->where('status', 'disetujui')->count();
     }
 
     public function getPendingCountAttribute(): int
     {
+        if (array_key_exists('pending_pendaftaran_count', $this->attributes)) {
+            return (int) $this->attributes['pending_pendaftaran_count'];
+        }
+
+        if ($this->relationLoaded('pendaftaran')) {
+            return $this->pendaftaran->where('status', 'pending')->count();
+        }
+
         return $this->pendaftaran()->where('status', 'pending')->count();
+    }
+
+    protected static function booted()
+    {
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('landing_categories');
+            \Illuminate\Support\Facades\Cache::forget('landing_latest_trainings');
+            \Illuminate\Support\Facades\Cache::forget('landing_stats');
+        });
+
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('landing_categories');
+            \Illuminate\Support\Facades\Cache::forget('landing_latest_trainings');
+            \Illuminate\Support\Facades\Cache::forget('landing_stats');
+        });
     }
 }

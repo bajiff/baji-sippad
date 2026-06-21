@@ -12,10 +12,9 @@ class DokumentasiController extends Controller
 {
     public function index()
     {
-        $dokumentasis = Dokumentasi::with('pelatihan')->latest()->paginate(15);
-        $pelatihans = Pelatihan::orderBy('judul')->get();
+        $pelatihans = Pelatihan::with('dokumentasi')->latest()->paginate(10);
 
-        return view('admin.dokumentasi.index', compact('dokumentasis', 'pelatihans'));
+        return view('admin.dokumentasi.index', compact('pelatihans'));
     }
 
     public function create()

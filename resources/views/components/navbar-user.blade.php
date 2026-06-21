@@ -10,9 +10,10 @@
             @auth
                 <a href="{{ route('user.dashboard') }}" class="text-sm text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:no-underline transition-colors">Dashboard</a>
                 <a href="{{ route('user.riwayat') }}" class="text-sm text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:no-underline transition-colors">Riwayat</a>
+                <a href="{{ route('user.sertifikat.index') }}" class="text-sm text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:no-underline transition-colors">Sertifikat</a>
                 <a href="{{ route('user.profil') }}" class="text-sm text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] hover:no-underline transition-colors">Profil</a>
                 <span class="text-sm text-[var(--color-ink-muted)]">{{ Auth::user()->name }}</span>
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('Apakah Anda yakin ingin keluar dari sistem?');">
                     @csrf
                     <button type="submit" class="text-sm text-[var(--color-ink-muted)] hover:text-[var(--color-danger)] transition-colors">Logout</button>
                 </form>

@@ -4,10 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pendaftaran;
+use App\Services\PendaftaranService;
 use Illuminate\Http\Request;
 
 class PendaftaranController extends Controller
 {
+    protected $pendaftaranService;
+
+    public function __construct(PendaftaranService $pendaftaranService)
+    {
+        $this->pendaftaranService = $pendaftaranService;
+    }
+
     public function index(Request $request)
     {
         $query = Pendaftaran::with(['user', 'pelatihan.kategori']);
@@ -26,21 +34,16 @@ class PendaftaranController extends Controller
 
     public function setujui(Pendaftaran $pendaftaran)
     {
-        $pendaftaran->update(['status' => 'disetujui']);
-
-        // Auto-close pelatihan if kuota is full
-        $pelatihan = $pendaftaran->pelatihan;
-        if ($pelatihan->isFull()) {
-            $pelatihan->update(['status' => 'closed']);
-        }
+        $this->pendaftaranService->setujui($pendaftaran);
 
         return redirect()->back()->with('success', 'Pendaftaran berhasil disetujui.');
     }
 
     public function tolak(Pendaftaran $pendaftaran)
     {
-        $pendaftaran->update(['status' => 'ditolak']);
+        $this->pendaftaranService->tolak($pendaftaran);
 
         return redirect()->back()->with('success', 'Pendaftaran berhasil ditolak.');
     }
 }
+

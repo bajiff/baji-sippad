@@ -6,7 +6,7 @@
 @section('content')
 <div class="max-w-2xl">
     <div class="card p-6">
-        <form method="POST" action="{{ route('admin.pelatihan.store') }}">
+        <form method="POST" action="{{ route('admin.pelatihan.store') }}" enctype="multipart/form-data">
             @csrf
             <div class="grid md:grid-cols-2 gap-4 mb-4">
                 <div>
@@ -68,6 +68,12 @@
             <div class="mb-4">
                 <label for="persyaratan" class="block text-sm font-medium text-[var(--color-ink)] mb-1">Persyaratan</label>
                 <textarea id="persyaratan" name="persyaratan" rows="2" class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">{{ old('persyaratan') }}</textarea>
+            </div>
+            <div class="mb-4">
+                <label for="thumbnail" class="block text-sm font-medium text-[var(--color-ink)] mb-1">Foto Thumbnail (Wajib) *</label>
+                <input type="file" id="thumbnail" name="thumbnail" accept="image/*" required
+                       class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)] bg-[var(--color-canvas)]">
+                @error('thumbnail') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
             </div>
             <div class="mb-6">
                 <label class="flex items-center gap-2 text-sm">

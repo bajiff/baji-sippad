@@ -20,4 +20,15 @@ class KategoriPelatihan extends Model
     {
         return $this->hasMany(Pelatihan::class, 'kategori_id');
     }
+
+    protected static function booted()
+    {
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('landing_categories');
+        });
+
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('landing_categories');
+        });
+    }
 }

@@ -11,16 +11,16 @@
     </a>
 </div>
 
-<div class="card overflow-hidden">
+<div class="card">
     <table class="w-full text-sm">
         <thead class="bg-[var(--color-surface-1)]">
             <tr>
-                <th class="text-left px-4 py-3 font-medium text-[var(--color-ink-muted)]">Judul</th>
+                <th class="text-left px-4 py-3 font-medium text-[var(--color-ink-muted)] rounded-tl-lg">Judul</th>
                 <th class="text-left px-4 py-3 font-medium text-[var(--color-ink-muted)]">Kategori</th>
                 <th class="text-left px-4 py-3 font-medium text-[var(--color-ink-muted)]">Tanggal</th>
                 <th class="text-left px-4 py-3 font-medium text-[var(--color-ink-muted)]">Kuota</th>
                 <th class="text-left px-4 py-3 font-medium text-[var(--color-ink-muted)]">Status</th>
-                <th class="text-right px-4 py-3 font-medium text-[var(--color-ink-muted)]">Aksi</th>
+                <th class="text-right px-4 py-3 font-medium text-[var(--color-ink-muted)] rounded-tr-lg">Aksi</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-[var(--color-border)]">
@@ -45,7 +45,7 @@
                         <div class="flex items-center justify-end gap-2">
                             <div x-data="{ open: false }" class="relative inline-block">
                                 <button @click="open = !open" class="text-[var(--color-ink-muted)] hover:text-[var(--color-ink)] text-sm">Status ▾</button>
-                                <div x-show="open" @click.outside="open = false" class="absolute right-0 mt-1 w-36 bg-[var(--color-canvas)] border border-[var(--color-border)] rounded shadow-lg z-10">
+                                <div x-show="open" @click.outside="open = false" class="absolute right-0 w-36 bg-[var(--color-canvas)] border border-[var(--color-border)] rounded shadow-lg z-20 {{ $loop->last ? 'bottom-full mb-1' : 'mt-1' }}">
                                     @foreach(['draft' => 'Draft', 'publish' => 'Publish', 'closed' => 'Closed', 'selesai' => 'Selesai'] as $val => $label)
                                         <form method="POST" action="{{ route('admin.pelatihan.updateStatus', $p) }}">
                                             @csrf @method('PATCH')
@@ -56,6 +56,9 @@
                                 </div>
                             </div>
                             <a href="{{ route('admin.pelatihan.edit', $p) }}" class="text-[var(--color-link)] hover:underline text-sm">Edit</a>
+                            @if(in_array($p->status, ['publish', 'selesai']))
+                                <a href="{{ route('admin.kehadiran.show', $p) }}" class="text-[var(--color-success)] hover:underline text-sm">Presensi</a>
+                            @endif
                             <form method="POST" action="{{ route('admin.pelatihan.destroy', $p) }}" onsubmit="return confirm('Yakin hapus?')">
                                 @csrf @method('DELETE')
                                 <button type="submit" class="text-[var(--color-danger)] hover:underline text-sm">Hapus</button>

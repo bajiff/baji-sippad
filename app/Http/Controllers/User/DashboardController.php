@@ -19,7 +19,7 @@ class DashboardController extends Controller
             ->get();
 
         $pendaftaranSaya = Pendaftaran::where('user_id', $user->id)
-            ->with('pelatihan')
+            ->with(['pelatihan.kategori', 'kehadiran'])
             ->latest()
             ->take(5)
             ->get();
@@ -28,6 +28,7 @@ class DashboardController extends Controller
             'terdaftar' => Pendaftaran::where('user_id', $user->id)->count(),
             'disetujui' => Pendaftaran::where('user_id', $user->id)->where('status', 'disetujui')->count(),
             'pending' => Pendaftaran::where('user_id', $user->id)->where('status', 'pending')->count(),
+            'ditolak' => Pendaftaran::where('user_id', $user->id)->where('status', 'ditolak')->count(),
         ];
 
         return view('user.dashboard', compact('pelatihanAktif', 'pendaftaranSaya', 'stats'));

@@ -92,6 +92,11 @@
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             @forelse($categories as $category)
+                @php
+                    if (!is_object($category)) {
+                        continue;
+                    }
+                @endphp
                 <div class="card p-6 flex flex-col items-center text-center bg-canvas border border-border rounded-lg hover:border-ink">
                     <div class="w-12 h-12 rounded-full bg-surface-1 flex items-center justify-center mb-4 text-ink">
                         @if(Str::contains(Str::lower($category->nama_kategori), ['teknologi', 'ti', 'komputer']))
@@ -141,6 +146,9 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @forelse($latestTrainings as $pelatihan)
                 @php
+                    if (!is_object($pelatihan)) {
+                        continue;
+                    }
                     $isFull = $pelatihan->isFull();
                     $approved = $pelatihan->approved_count;
                     $quota = $pelatihan->kuota;
@@ -149,6 +157,14 @@
                 <div class="card flex flex-col bg-canvas border border-border rounded-lg overflow-hidden shadow-card hover:border-ink">
                     <!-- Top accent line based on category -->
                     <div class="h-1 bg-primary"></div>
+                    
+                    @if($pelatihan->thumbnail)
+                        <img src="{{ Storage::url($pelatihan->thumbnail) }}" alt="{{ $pelatihan->judul }}" class="w-full h-48 object-cover">
+                    @else
+                        <div class="w-full h-48 bg-surface-1 flex items-center justify-center">
+                            <svg class="w-12 h-12 text-border" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                    @endif
                     
                     <div class="p-6 flex-1 flex flex-col">
                         <!-- Category Badge -->
@@ -200,15 +216,21 @@
                                 </div>
                             @endif
                             
-                            @guest
-                                <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-ink !text-white hover:bg-ink/90 text-sm font-semibold rounded-sm transition-colors duration-200 hover:no-underline">
-                                    Login Untuk Mendaftar
-                                </a>
+                            @if($isFull || $pelatihan->status === 'closed')
+                                <button disabled class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-surface-2 text-ink-muted border border-border text-sm font-semibold rounded-sm cursor-not-allowed">
+                                    Sudah Penuh
+                                </button>
                             @else
-                                <a href="{{ route('user.pelatihan.show', $pelatihan->id) }}" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-primary !text-white hover:bg-primary-hover text-sm font-semibold rounded-sm transition-colors duration-200 hover:no-underline">
-                                    Lihat Detail Kelas
-                                </a>
-                            @endguest
+                                @guest
+                                    <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-[var(--color-ink)] !text-[var(--color-canvas)] hover:opacity-90 text-sm font-semibold rounded-sm transition-colors duration-200 hover:no-underline">
+                                        Login Untuk Mendaftar
+                                    </a>
+                                @else
+                                    <a href="{{ route('user.pelatihan.show', $pelatihan->id) }}" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-primary !text-white hover:bg-primary-hover text-sm font-semibold rounded-sm transition-colors duration-200 hover:no-underline">
+                                        Lihat Detail Kelas
+                                    </a>
+                                @endguest
+                            @endif
 
                         </div>
                     </div>
@@ -272,60 +294,60 @@
 </section>
 
 <!-- Footer Overwrite (Premium 3 Columns) -->
-<footer class="bg-ink text-canvas pt-16 pb-8 border-t border-border">
+<footer class="bg-[var(--color-surface-1)] text-[var(--color-ink)] pt-16 pb-8 border-t border-[var(--color-border)]">
     <div class="max-w-7xl mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
             <!-- Column 1 -->
             <div>
-                <div class="flex items-center gap-2 text-xl font-bold text-canvas mb-4">
+                <div class="flex items-center gap-2 text-xl font-bold text-[var(--color-ink)] mb-4">
                     <span class="w-5 h-5 bg-primary inline-flex items-center justify-center text-[10px] text-on-primary font-bold rounded-sm shadow-sm">S</span>
                     <span>SIPPAD</span>
                 </div>
-                <p class="text-sm text-gray-400 leading-relaxed mb-6">
+                <p class="text-sm text-[var(--color-ink-muted)] leading-relaxed mb-6">
                     Sistem Pendaftaran Pelatihan Anak Desa. Mewujudkan masyarakat desa yang mandiri, kreatif, berdaya saing tinggi, dan cakap teknologi.
                 </p>
                 <div class="flex items-center gap-3">
                     <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                    <span class="text-xs text-gray-400 font-medium">Server Status: Operasional</span>
+                    <span class="text-xs text-[var(--color-ink-muted)] font-medium">Server Status: Operasional</span>
                 </div>
             </div>
             <!-- Column 2 -->
             <div>
-                <h4 class="text-sm font-bold tracking-wider uppercase text-gray-300 mb-4 border-l-2 border-primary pl-2">Navigasi Cepat</h4>
-                <ul class="space-y-2 text-sm text-gray-400">
-                    <li><a href="{{ route('landing') }}" class="hover:text-canvas hover:underline">Beranda</a></li>
-                    <li><a href="#pelatihan" class="hover:text-canvas hover:underline">Daftar Kelas Pelatihan</a></li>
+                <h4 class="text-sm font-bold tracking-wider uppercase text-[var(--color-ink)] mb-4 border-l-2 border-primary pl-2">Navigasi Cepat</h4>
+                <ul class="space-y-2 text-sm text-[var(--color-ink-muted)]">
+                    <li><a href="{{ route('landing') }}" class="hover:text-[var(--color-link)] hover:underline">Beranda</a></li>
+                    <li><a href="#pelatihan" class="hover:text-[var(--color-link)] hover:underline">Daftar Kelas Pelatihan</a></li>
                     @guest
-                        <li><a href="{{ route('login') }}" class="hover:text-canvas hover:underline">Masuk Akun</a></li>
-                        <li><a href="{{ route('register') }}" class="hover:text-canvas hover:underline">Registrasi Baru</a></li>
+                        <li><a href="{{ route('login') }}" class="hover:text-[var(--color-link)] hover:underline">Masuk Akun</a></li>
+                        <li><a href="{{ route('register') }}" class="hover:text-[var(--color-link)] hover:underline">Registrasi Baru</a></li>
                     @else
-                        <li><a href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="hover:text-canvas hover:underline">Dashboard</a></li>
+                        <li><a href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}" class="hover:text-[var(--color-link)] hover:underline">Dashboard</a></li>
                     @endguest
                 </ul>
             </div>
             <!-- Column 3 -->
             <div>
-                <h4 class="text-sm font-bold tracking-wider uppercase text-gray-300 mb-4 border-l-2 border-primary pl-2">Hubungi Kami</h4>
-                <ul class="space-y-3 text-sm text-gray-400">
+                <h4 class="text-sm font-bold tracking-wider uppercase text-[var(--color-ink)] mb-4 border-l-2 border-primary pl-2">Hubungi Kami</h4>
+                <ul class="space-y-3 text-sm text-[var(--color-ink-muted)]">
                     <li class="flex items-start gap-2">
-                        <svg class="w-5 h-5 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <svg class="w-5 h-5 text-[var(--color-ink-muted)] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         <span>Kantor Kepala Desa Karangduren, Jl. Pemuda No. 45, Kecamatan Karangduren, Kabupaten Malang, Jawa Timur</span>
                     </li>
                     <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                        <svg class="w-5 h-5 text-[var(--color-ink-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                         <span>(0341) 7891011</span>
                     </li>
                     <li class="flex items-center gap-2">
-                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <svg class="w-5 h-5 text-[var(--color-ink-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         <span>info@sippad.go.id</span>
                     </li>
                 </ul>
             </div>
         </div>
         
-        <div class="border-t border-gray-800 pt-8 mt-8 text-center text-xs text-gray-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="border-t border-[var(--color-border)] pt-8 mt-8 text-center text-xs text-[var(--color-ink-muted)] flex flex-col sm:flex-row items-center justify-between gap-4">
             <p>&copy; {{ date('Y') }} SIPPAD — Sistem Pendaftaran Pelatihan Anak Desa. Hak Cipta Dilindungi Undang-Undang.</p>
-            <p class="text-gray-600">Dikembangkan di bawah Panduan Desain Adobe Spectrum</p>
+            <p class="text-[var(--color-ink-muted)]">Dikembangkan di bawah Panduan Desain Adobe Spectrum</p>
         </div>
     </div>
 </footer>

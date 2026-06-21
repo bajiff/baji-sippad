@@ -18,6 +18,7 @@ class User extends Authenticatable
         'alamat',
         'tanggal_lahir',
         'role',
+        'is_superadmin',
     ];
 
     protected $hidden = [
@@ -31,6 +32,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'tanggal_lahir' => 'date',
+            'is_superadmin' => 'boolean',
         ];
     }
 
@@ -44,8 +46,24 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return (bool) $this->is_superadmin;
+    }
+
     public function pendaftaran()
     {
         return $this->hasMany(Pendaftaran::class);
+    }
+
+    protected static function booted()
+    {
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('landing_stats');
+        });
+
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('landing_stats');
+        });
     }
 }

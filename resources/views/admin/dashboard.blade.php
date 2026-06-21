@@ -4,14 +4,18 @@
 @section('header', 'Dashboard')
 
 @section('content')
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
     <div class="card p-5">
-        <p class="text-sm text-[var(--color-ink-muted)]">Total Peserta</p>
-        <p class="text-3xl font-bold text-[var(--color-ink)] mt-1">{{ $stats['total_peserta'] }}</p>
+        <p class="text-sm text-[var(--color-ink-muted)]">Total Akun</p>
+        <p class="text-3xl font-bold text-[var(--color-ink)] mt-1">{{ $stats['total_akun'] }}</p>
     </div>
     <div class="card p-5">
         <p class="text-sm text-[var(--color-ink-muted)]">Pelatihan Aktif</p>
         <p class="text-3xl font-bold text-[var(--color-success)] mt-1">{{ $stats['pelatihan_aktif'] }}</p>
+    </div>
+    <div class="card p-5">
+        <p class="text-sm text-[var(--color-ink-muted)]">Kategori Pelatihan</p>
+        <p class="text-3xl font-bold text-[var(--color-link)] mt-1">{{ $stats['total_kategori'] }}</p>
     </div>
     <div class="card p-5">
         <p class="text-sm text-[var(--color-ink-muted)]">Menunggu Verifikasi</p>

@@ -10,10 +10,10 @@
             @csrf
             <div class="mb-4">
                 <label for="pelatihan_id" class="block text-sm font-medium text-[var(--color-ink)] mb-1">Pelatihan *</label>
-                <select id="pelatihan_id" name="pelatihan_id" required class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
-                    <option value="">— Pilih Pelatihan —</option>
+                <select id="pelatihan_id" name="pelatihan_id" required class="w-full px-3 py-2 bg-[var(--color-canvas)] text-[var(--color-ink)] border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
+                    <option value="" class="bg-[var(--color-canvas)] text-[var(--color-ink)]">— Pilih Pelatihan —</option>
                     @foreach($pelatihans as $p)
-                        <option value="{{ $p->id }}" {{ old('pelatihan_id') == $p->id ? 'selected' : '' }}>{{ $p->judul }}</option>
+                        <option value="{{ $p->id }}" {{ old('pelatihan_id') == $p->id ? 'selected' : '' }} class="bg-[var(--color-canvas)] text-[var(--color-ink)]">{{ $p->judul }}</option>
                     @endforeach
                 </select>
                 @error('pelatihan_id') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
