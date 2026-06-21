@@ -39,9 +39,13 @@ class PendaftaranController extends Controller
         return redirect()->back()->with('success', 'Pendaftaran berhasil disetujui.');
     }
 
-    public function tolak(Pendaftaran $pendaftaran)
+    public function tolak(Request $request, Pendaftaran $pendaftaran)
     {
-        $this->pendaftaranService->tolak($pendaftaran);
+        $request->validate([
+            'alasan_penolakan' => 'nullable|string|max:255'
+        ]);
+
+        $this->pendaftaranService->tolak($pendaftaran, $request->input('alasan_penolakan'));
 
         return redirect()->back()->with('success', 'Pendaftaran berhasil ditolak.');
     }

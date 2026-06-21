@@ -71,11 +71,15 @@ class PendaftaranService
      * Menolak pendaftaran pelatihan.
      *
      * @param Pendaftaran $pendaftaran
+     * @param string|null $alasan
      * @return void
      */
-    public function tolak(Pendaftaran $pendaftaran): void
+    public function tolak(Pendaftaran $pendaftaran, ?string $alasan = null): void
     {
-        $pendaftaran->update(['status' => 'ditolak']);
+        $pendaftaran->update([
+            'status' => 'ditolak',
+            'alasan_penolakan' => $alasan
+        ]);
 
         // Kirim notifikasi ke user
         $pendaftaran->user->notify(new PendaftaranStatusNotification($pendaftaran));

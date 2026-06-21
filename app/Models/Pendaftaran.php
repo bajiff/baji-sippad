@@ -16,6 +16,7 @@ class Pendaftaran extends Model
         'pelatihan_id',
         'tanggal_daftar',
         'status',
+        'alasan_penolakan',
     ];
 
     protected function casts(): array
