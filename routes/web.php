@@ -20,12 +20,12 @@ Route::get('/', function () {
     $latestTrainings = \App\Models\Pelatihan::with(['kategori'])
         ->whereIn('status', ['publish', 'closed'])
         ->latest()
-        ->take(3)
+        ->take(6)
         ->get();
 
     $stats = [
-        'total_pelatihan' => \App\Models\Pelatihan::whereIn('status', ['publish', 'selesai'])->count(),
-        'total_peserta' => \App\Models\User::where('role', 'user')->count(),
+        'total_pelatihan' => \App\Models\Pelatihan::count(),
+        'total_peserta' => \App\Models\User::count(),
         'total_sertifikat' => \App\Models\Sertifikat::count(),
     ];
 

@@ -53,7 +53,7 @@
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 </div>
                 <div>
-                    <h3 class="text-3xl font-bold text-ink leading-none mb-1">{{ max($stats['total_pelatihan'], 5) }}</h3>
+                    <h3 class="text-3xl font-bold text-ink leading-none mb-1">{{ $stats['total_pelatihan'] }}</h3>
                     <p class="text-sm font-medium text-ink-muted">Pelatihan Tersedia</p>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 </div>
                 <div>
-                    <h3 class="text-3xl font-bold text-ink leading-none mb-1">{{ max($stats['total_peserta'], 24) }}</h3>
+                    <h3 class="text-3xl font-bold text-ink leading-none mb-1">{{ $stats['total_peserta'] }}</h3>
                     <p class="text-sm font-medium text-ink-muted">Peserta Terdaftar</p>
                 </div>
             </div>
@@ -73,7 +73,7 @@
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
                 </div>
                 <div>
-                    <h3 class="text-3xl font-bold text-ink leading-none mb-1">{{ max($stats['total_sertifikat'], 12) }}</h3>
+                    <h3 class="text-3xl font-bold text-ink leading-none mb-1">{{ $stats['total_sertifikat'] }}</h3>
                     <p class="text-sm font-medium text-ink-muted">Sertifikat Diterbitkan</p>
                 </div>
             </div>
@@ -90,14 +90,14 @@
             <div class="w-12 h-1 bg-primary mx-auto mt-4"></div>
         </div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div class="flex overflow-x-auto gap-6 pb-6 pt-2 px-1 snap-x snap-mandatory scrollbar-thin">
             @forelse($categories as $category)
                 @php
                     if (!is_object($category)) {
                         continue;
                     }
                 @endphp
-                <div class="card p-6 flex flex-col items-center text-center bg-canvas border border-border rounded-lg hover:border-ink">
+                <div class="card p-6 flex flex-col items-center text-center bg-canvas border border-border rounded-lg hover:border-ink flex-shrink-0 w-64 sm:w-72 snap-start">
                     <div class="w-12 h-12 rounded-full bg-surface-1 flex items-center justify-center mb-4 text-ink">
                         @if(Str::contains(Str::lower($category->nama_kategori), ['teknologi', 'ti', 'komputer']))
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
