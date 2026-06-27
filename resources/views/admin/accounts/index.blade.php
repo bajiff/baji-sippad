@@ -15,9 +15,28 @@
     </div>
 </div>
 
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+    <div class="card p-4 border-l-4 border-l-[var(--color-link)]">
+        <p class="text-xs text-[var(--color-ink-muted)]">Rata-rata Umur</p>
+        <p class="text-xl font-bold text-[var(--color-ink)] mt-1">{{ $statsUmur['rata_rata'] }} <span class="text-xs font-normal">Tahun</span></p>
+    </div>
+    <div class="card p-4 border-l-4 border-l-[var(--color-primary)]">
+        <p class="text-xs text-[var(--color-ink-muted)]">Umur Tertua</p>
+        <p class="text-xl font-bold text-[var(--color-primary)] mt-1">{{ $statsUmur['tertua'] }} <span class="text-xs font-normal">Tahun</span></p>
+    </div>
+    <div class="card p-4 border-l-4 border-l-[var(--color-success)]">
+        <p class="text-xs text-[var(--color-ink-muted)]">Umur Termuda</p>
+        <p class="text-xl font-bold text-[var(--color-success)] mt-1">{{ $statsUmur['termuda'] }} <span class="text-xs font-normal">Tahun</span></p>
+    </div>
+    <div class="card p-4 border-l-4 border-l-[var(--color-warning)]">
+        <p class="text-xs text-[var(--color-ink-muted)]">Total Akun</p>
+        <p class="text-xl font-bold text-[var(--color-ink)] mt-1">{{ $accounts->total() }} <span class="text-xs font-normal">Akun</span></p>
+    </div>
+</div>
+
 <div class="card p-6 mb-6">
     <form method="GET" action="{{ route('admin.accounts.index') }}" class="flex flex-wrap items-end gap-4">
-        <div class="flex-1 min-w-[240px]">
+        <div class="flex-1 min-w-[200px]">
             <label class="block text-sm font-medium text-[var(--color-ink)] mb-1">Cari Akun</label>
             <input type="text" name="search" value="{{ request('search') }}" placeholder="Nama, email, atau no HP..." 
                    class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
@@ -31,6 +50,22 @@
             </select>
         </div>
         <div>
+            <label class="block text-sm font-medium text-[var(--color-ink)] mb-1">Urutkan / Filter</label>
+            <select name="sort" class="px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
+                <option value="latest" {{ request('sort', 'latest') == 'latest' ? 'selected' : '' }}>Terbaru</option>
+                <option value="a_z" {{ request('sort') == 'a_z' ? 'selected' : '' }}>Nama: A - Z</option>
+                <option value="z_a" {{ request('sort') == 'z_a' ? 'selected' : '' }}>Nama: Z - A</option>
+                <option value="tertua" {{ request('sort') == 'tertua' ? 'selected' : '' }}>Umur: Tertua</option>
+                <option value="termuda" {{ request('sort') == 'termuda' ? 'selected' : '' }}>Umur: Termuda</option>
+                <option value="rata_rata" {{ request('sort') == 'rata_rata' ? 'selected' : '' }}>Mendekati Rata-rata</option>
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-[var(--color-ink)] mb-1">Tahun Lahir</label>
+            <input type="number" name="tahun_lahir" value="{{ request('tahun_lahir') }}" placeholder="Contoh: 1998"
+                   class="w-28 px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
+        </div>
+        <div>
             <label class="block text-sm font-medium text-[var(--color-ink)] mb-1">Tampilkan</label>
             <select name="per_page" class="px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
                 <option value="10" {{ request('per_page') == '10' ? 'selected' : '' }}>10 data</option>
@@ -40,7 +75,7 @@
             </select>
         </div>
         <button type="submit" class="px-4 py-2 bg-[var(--color-surface-2)] text-[var(--color-ink)] rounded text-sm font-medium hover:bg-[var(--color-border)]">Filter</button>
-        @if(request()->anyFilled(['search', 'role']) || (request('per_page') && request('per_page') !== '10'))
+        @if(request()->anyFilled(['search', 'role', 'tahun_lahir']) || (request('per_page') && request('per_page') !== '10') || (request('sort') && request('sort') !== 'latest'))
             <a href="{{ route('admin.accounts.index') }}" class="px-4 py-2 border border-[var(--color-border)] rounded text-sm text-[var(--color-ink)] hover:bg-[var(--color-surface-1)]">Reset</a>
         @endif
     </form>

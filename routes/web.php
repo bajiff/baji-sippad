@@ -81,6 +81,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Laporan
     Route::get('laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan.index');
     Route::get('laporan/export/{format}', [\App\Http\Controllers\Admin\LaporanController::class, 'export'])->name('laporan.export');
+
+    // Profil
+    Route::get('profil', [\App\Http\Controllers\Admin\ProfilController::class, 'edit'])->name('profil');
+    Route::patch('profil', [\App\Http\Controllers\Admin\ProfilController::class, 'update'])->name('profil.update');
 });
 
 // User Routes

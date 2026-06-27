@@ -32,6 +32,43 @@ class AccountController extends Controller
             $query->where('role', $request->input('role'));
         }
 
+        // Tahun Lahir filter
+        if ($request->filled('tahun_lahir')) {
+            $tahun = $request->input('tahun_lahir');
+            if (config('database.default') === 'pgsql') {
+                $query->whereRaw('EXTRACT(YEAR FROM tanggal_lahir) = ?', [$tahun]);
+            } else {
+                $query->whereRaw("strftime('%Y', tanggal_lahir) = ?", [(string)$tahun]);
+            }
+        }
+
+        // Sorting (A-Z, Z-A, Tertua, Termuda, Rata-rata)
+        $sort = $request->input('sort', 'latest');
+        if ($sort === 'a_z') {
+            $query->orderBy('name', 'asc');
+        } elseif ($sort === 'z_a') {
+            $query->orderBy('name', 'desc');
+        } elseif ($sort === 'tertua') {
+            $query->whereNotNull('tanggal_lahir')->orderBy('tanggal_lahir', 'asc');
+        } elseif ($sort === 'termuda') {
+            $query->whereNotNull('tanggal_lahir')->orderBy('tanggal_lahir', 'desc');
+        } elseif ($sort === 'rata_rata') {
+            $usersWithBirth = User::whereNotNull('tanggal_lahir')->get();
+            $avgAge = $usersWithBirth->avg(fn($u) => $u->umur) ?: 0;
+            if ($avgAge > 0) {
+                $targetYear = date('Y') - round($avgAge);
+                if (config('database.default') === 'pgsql') {
+                    $query->whereNotNull('tanggal_lahir')->orderByRaw('ABS(EXTRACT(YEAR FROM tanggal_lahir) - ?)', [$targetYear]);
+                } else {
+                    $query->whereNotNull('tanggal_lahir')->orderByRaw("ABS(CAST(strftime('%Y', tanggal_lahir) AS INTEGER) - ?)", [$targetYear]);
+                }
+            } else {
+                $query->latest();
+            }
+        } else {
+            $query->latest();
+        }
+
         $perPage = $request->input('per_page', 10);
         if ($perPage === 'all') {
             $count = $query->count();
@@ -40,9 +77,17 @@ class AccountController extends Controller
             $perPage = in_array((int)$perPage, [10, 20, 30]) ? (int)$perPage : 10;
         }
 
-        $accounts = $query->latest()->paginate($perPage)->withQueryString();
+        $accounts = $query->paginate($perPage)->withQueryString();
 
-        return view('admin.accounts.index', compact('accounts'));
+        // Stats Umur
+        $allUsersWithBirth = User::whereNotNull('tanggal_lahir')->get();
+        $statsUmur = [
+            'rata_rata' => $allUsersWithBirth->count() > 0 ? round($allUsersWithBirth->avg(fn($u) => $u->umur), 1) : 0,
+            'tertua' => $allUsersWithBirth->count() > 0 ? $allUsersWithBirth->max(fn($u) => $u->umur) : 0,
+            'termuda' => $allUsersWithBirth->count() > 0 ? $allUsersWithBirth->min(fn($u) => $u->umur) : 0,
+        ];
+
+        return view('admin.accounts.index', compact('accounts', 'statsUmur'));
     }
 
     /**

@@ -80,6 +80,13 @@
                     Laporan
                 </a>
             </li>
+            <li>
+                <a href="{{ route('admin.profil') }}"
+                   class="flex items-center gap-3 px-3 py-2.5 rounded text-sm transition-colors {{ request()->routeIs('admin.profil*') ? 'bg-[var(--color-surface-2)] text-[var(--color-ink)] font-medium' : 'text-[var(--color-ink-muted)] hover:bg-[var(--color-surface-1)] hover:text-[var(--color-ink)]' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Profil
+                </a>
+            </li>
         </ul>
     </nav>
 
