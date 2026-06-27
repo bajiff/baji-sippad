@@ -27,16 +27,21 @@ class PendaftaranController extends Controller
             $query->where('pelatihan_id', $request->pelatihan_id);
         }
 
-        $pendaftarans = $query->latest()->paginate(15);
+        $pendaftarans = $query->latest()->paginate(15)->withQueryString();
+        $pelatihans = \App\Models\Pelatihan::latest()->get();
+        $selectedPelatihan = $request->filled('pelatihan_id') ? \App\Models\Pelatihan::find($request->pelatihan_id) : null;
 
-        return view('admin.pendaftaran.index', compact('pendaftarans'));
+        return view('admin.pendaftaran.index', compact('pendaftarans', 'pelatihans', 'selectedPelatihan'));
     }
 
     public function setujui(Pendaftaran $pendaftaran)
     {
-        $this->pendaftaranService->setujui($pendaftaran);
-
-        return redirect()->back()->with('success', 'Pendaftaran berhasil disetujui.');
+        try {
+            $this->pendaftaranService->setujui($pendaftaran);
+            return redirect()->back()->with('success', 'Pendaftaran berhasil disetujui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function tolak(Request $request, Pendaftaran $pendaftaran)

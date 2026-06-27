@@ -55,10 +55,14 @@ class PendaftaranService
      */
     public function setujui(Pendaftaran $pendaftaran): void
     {
+        $pelatihan = $pendaftaran->pelatihan;
+        if ($pelatihan->isFull()) {
+            throw new Exception('Gagal menyetujui: Kuota pelatihan sudah penuh (' . $pelatihan->approved_count . '/' . $pelatihan->kuota . '). Silakan perbarui kuota pelatihan terlebih dahulu.');
+        }
+
         $pendaftaran->update(['status' => 'disetujui']);
 
         // Auto-close pelatihan if kuota is full
-        $pelatihan = $pendaftaran->pelatihan;
         if ($pelatihan->isFull()) {
             $pelatihan->update(['status' => 'closed']);
         }
