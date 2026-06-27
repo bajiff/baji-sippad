@@ -102,6 +102,11 @@ class AccountController extends Controller
             return redirect()->route('admin.accounts.index')->with('error', 'Superadmin (admin utama) tidak bisa diubah oleh admin biasa.');
         }
 
+        // Prevent fellow normal admin from editing another admin
+        if ($account->role === 'admin' && $account->id !== $currentUser->id && !$currentUser->isSuperAdmin()) {
+            return redirect()->route('admin.accounts.index')->with('error', 'Sesama admin biasa tidak dapat mengedit akun admin lainnya.');
+        }
+
         return view('admin.accounts.edit', compact('account'));
     }
 
@@ -115,6 +120,11 @@ class AccountController extends Controller
         // Prevent non-superadmin from updating a superadmin
         if ($account->isSuperAdmin() && !$currentUser->isSuperAdmin()) {
             return redirect()->route('admin.accounts.index')->with('error', 'Superadmin (admin utama) tidak bisa diubah oleh admin biasa.');
+        }
+
+        // Prevent fellow normal admin from updating another admin
+        if ($account->role === 'admin' && $account->id !== $currentUser->id && !$currentUser->isSuperAdmin()) {
+            return redirect()->route('admin.accounts.index')->with('error', 'Sesama admin biasa tidak dapat mengedit akun admin lainnya.');
         }
 
         if (!$currentUser->isSuperAdmin() && $request->input('role') === 'admin' && $account->role !== 'admin') {
@@ -168,6 +178,11 @@ class AccountController extends Controller
         // Prevent non-superadmin from deleting a superadmin
         if ($account->isSuperAdmin() && !$currentUser->isSuperAdmin()) {
             return redirect()->route('admin.accounts.index')->with('error', 'Superadmin (admin utama) tidak bisa dihapus oleh admin biasa.');
+        }
+
+        // Prevent fellow normal admin from deleting another admin
+        if ($account->role === 'admin' && !$currentUser->isSuperAdmin()) {
+            return redirect()->route('admin.accounts.index')->with('error', 'Sesama admin biasa tidak dapat menghapus akun admin lainnya.');
         }
 
         $account->delete();

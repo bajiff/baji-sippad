@@ -48,17 +48,11 @@
                             <option selected>{{ ucfirst($account->role) }} (Akun Sendiri)</option>
                         </select>
                         <p class="text-[10px] text-[var(--color-ink-muted)] mt-1">Anda tidak dapat mengubah role akun Anda sendiri.</p>
-                    @elseif(auth()->user()->isSuperAdmin())
+                    @else
                         <select id="role" name="role" required class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
                             <option value="user" {{ old('role', $account->role) == 'user' ? 'selected' : '' }}>User (Peserta)</option>
                             <option value="admin" {{ old('role', $account->role) == 'admin' ? 'selected' : '' }}>Admin</option>
                         </select>
-                    @else
-                        <input type="hidden" name="role" value="{{ $account->role }}">
-                        <select disabled class="w-full px-3 py-2 border border-[var(--color-border)] bg-[var(--color-surface-1)] rounded text-sm text-[var(--color-ink-muted)]">
-                            <option selected>{{ ucfirst($account->role) }}</option>
-                        </select>
-                        <p class="text-[10px] text-[var(--color-ink-muted)] mt-1">Hanya Superadmin yang dapat mengubah role akun.</p>
                     @endif
                     @error('role') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
                 </div>

@@ -109,12 +109,16 @@
                                         <span class="text-[var(--color-ink-muted)] text-xs italic" title="Admin biasa tidak memiliki hak akses untuk mengedit Superadmin">Terkunci</span>
                                     @endif
                                 @else
-                                    <a href="{{ route('admin.accounts.edit', $account) }}" class="text-[var(--color-link)] hover:underline text-sm font-medium">Edit</a>
-                                    @if($account->id !== auth()->id())
-                                        <form id="delete-form-{{ $account->id }}" method="POST" action="{{ route('admin.accounts.destroy', $account) }}" style="display: none;">
-                                            @csrf @method('DELETE')
-                                        </form>
-                                        <button type="button" onclick="if(confirm('Yakin hapus akun ini?')) { document.getElementById('delete-form-{{ $account->id }}').submit(); }" class="text-[var(--color-danger)] hover:underline text-sm font-medium">Hapus</button>
+                                    @if($account->role === 'admin' && $account->id !== auth()->id() && !auth()->user()->isSuperAdmin())
+                                        <span class="text-[var(--color-ink-muted)] text-xs italic" title="Sesama admin biasa tidak dapat mengedit admin lainnya">Terkunci</span>
+                                    @else
+                                        <a href="{{ route('admin.accounts.edit', $account) }}" class="text-[var(--color-link)] hover:underline text-sm font-medium">Edit</a>
+                                        @if($account->id !== auth()->id())
+                                            <form id="delete-form-{{ $account->id }}" method="POST" action="{{ route('admin.accounts.destroy', $account) }}" style="display: none;">
+                                                @csrf @method('DELETE')
+                                            </form>
+                                            <button type="button" onclick="if(confirm('Yakin hapus akun ini?')) { document.getElementById('delete-form-{{ $account->id }}').submit(); }" class="text-[var(--color-danger)] hover:underline text-sm font-medium">Hapus</button>
+                                        @endif
                                     @endif
                                 @endif
                             </div>

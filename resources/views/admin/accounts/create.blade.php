@@ -41,18 +41,10 @@
             <div class="grid md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label for="role" class="block text-sm font-medium text-[var(--color-ink)] mb-1">Role Akun *</label>
-                    @if(auth()->user()->isSuperAdmin())
-                        <select id="role" name="role" required class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
-                            <option value="user" {{ old('role', 'user') == 'user' ? 'selected' : '' }}>User (Peserta)</option>
-                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                        </select>
-                    @else
-                        <input type="hidden" name="role" value="user">
-                        <select disabled class="w-full px-3 py-2 border border-[var(--color-border)] bg-[var(--color-surface-1)] rounded text-sm text-[var(--color-ink-muted)]">
-                            <option selected>User (Peserta)</option>
-                        </select>
-                        <p class="text-[10px] text-[var(--color-ink-muted)] mt-1">Hanya Superadmin yang dapat membuat akun ber-role Admin.</p>
-                    @endif
+                    <select id="role" name="role" required class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
+                        <option value="user" {{ old('role', 'user') == 'user' ? 'selected' : '' }}>User (Peserta)</option>
+                        <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                    </select>
                     @error('role') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
                 </div>
                 <div>
