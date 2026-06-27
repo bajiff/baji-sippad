@@ -129,117 +129,131 @@
 <!-- Pelatihan Terbaru Section -->
 <section id="pelatihan" class="py-24 bg-surface-1 border-t border-b border-border bg-dot-pattern">
     <div class="max-w-7xl mx-auto px-4">
-        <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-16">
-            <div>
-                <h2 class="text-xs font-bold text-primary tracking-widest uppercase mb-3">Jadwal Kelas</h2>
-                <h3 class="text-3xl font-bold text-ink">Pelatihan Terbaru & Unggulan</h3>
-                <div class="w-12 h-1 bg-primary mt-4"></div>
+        <div x-data="{ 
+            scroll(direction) { 
+                $refs.slider.scrollBy({ left: direction * 360, behavior: 'smooth' }); 
+            } 
+        }" class="relative">
+            <div class="flex flex-col md:flex-row items-start md:items-end justify-between mb-12">
+                <div>
+                    <h2 class="text-xs font-bold text-primary tracking-widest uppercase mb-3">Jadwal Kelas</h2>
+                    <h3 class="text-3xl font-bold text-ink">Pelatihan Terbaru & Unggulan</h3>
+                    <div class="w-12 h-1 bg-primary mt-4"></div>
+                </div>
+                <div class="flex items-center gap-3 mt-6 md:mt-0">
+                    <button @click="scroll(-1)" type="button" class="w-10 h-10 rounded-full border border-border bg-canvas text-ink hover:bg-primary hover:!text-white hover:border-primary transition-all duration-200 flex items-center justify-center shadow-sm" aria-label="Geser Kiri">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <button @click="scroll(1)" type="button" class="w-10 h-10 rounded-full border border-border bg-canvas text-ink hover:bg-primary hover:!text-white hover:border-primary transition-all duration-200 flex items-center justify-center shadow-sm" aria-label="Geser Kanan">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                    @auth
+                        <a href="{{ route('user.pelatihan.index') }}" class="ml-2 inline-flex items-center gap-1.5 text-sm font-semibold text-link hover:underline">
+                            Lihat Semua Kelas
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    @endauth
+                </div>
             </div>
-            @auth
-                <a href="{{ route('user.pelatihan.index') }}" class="mt-4 md:mt-0 inline-flex items-center gap-1.5 text-sm font-semibold text-link hover:underline">
-                    Lihat Semua Kelas
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-                </a>
-            @endauth
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @forelse($latestTrainings as $pelatihan)
-                @php
-                    if (!is_object($pelatihan)) {
-                        continue;
-                    }
-                    $isFull = $pelatihan->isFull();
-                    $approved = $pelatihan->approved_count;
-                    $quota = $pelatihan->kuota;
-                    $percentage = $quota > 0 ? min(($approved / $quota) * 100, 100) : 0;
-                @endphp
-                <div class="card flex flex-col bg-canvas border border-border rounded-lg overflow-hidden shadow-card hover:border-ink">
-                    <!-- Top accent line based on category -->
-                    <div class="h-1 bg-primary"></div>
-                    
-                    @if($pelatihan->thumbnail)
-                        <img src="{{ Storage::url($pelatihan->thumbnail) }}" alt="{{ $pelatihan->judul }}" class="w-full h-48 object-cover">
-                    @else
-                        <div class="w-full h-48 bg-surface-1 flex items-center justify-center">
-                            <svg class="w-12 h-12 text-border" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                        </div>
-                    @endif
-                    
-                    <div class="p-6 flex-1 flex flex-col">
-                        <!-- Category Badge -->
-                        <div class="mb-4">
-                            <span class="inline-block px-2.5 py-0.5 rounded-sm bg-surface-1 text-xs font-semibold text-ink-muted border border-border">
-                                {{ $pelatihan->kategori->nama_kategori }}
-                            </span>
-                        </div>
+            
+            <div x-ref="slider" class="flex overflow-x-auto gap-8 pb-8 pt-2 px-1 snap-x snap-mandatory scrollbar-thin">
+                @forelse($latestTrainings as $pelatihan)
+                    @php
+                        if (!is_object($pelatihan)) {
+                            continue;
+                        }
+                        $isFull = $pelatihan->isFull();
+                        $approved = $pelatihan->approved_count;
+                        $quota = $pelatihan->kuota;
+                        $percentage = $quota > 0 ? min(($approved / $quota) * 100, 100) : 0;
+                    @endphp
+                    <div class="card flex flex-col bg-canvas border border-border rounded-lg overflow-hidden shadow-card hover:border-ink flex-shrink-0 w-80 sm:w-96 snap-start">
+                        <!-- Top accent line based on category -->
+                        <div class="h-1 bg-primary"></div>
                         
-                        <!-- Title -->
-                        <h4 class="text-xl font-bold text-ink mb-3 line-clamp-2 leading-snug">
-                            {{ $pelatihan->judul }}
-                        </h4>
-                        
-                        <p class="text-sm text-ink-muted mb-6 line-clamp-3 leading-relaxed">
-                            {{ $pelatihan->deskripsi }}
-                        </p>
-                        
-                        <!-- Info Grid -->
-                        <div class="space-y-2 mb-6 border-t border-surface-2 pt-4 text-xs text-ink">
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                <span>Narasumber: <strong class="font-semibold">{{ $pelatihan->narasumber }}</strong></span>
+                        @if($pelatihan->thumbnail)
+                            <img src="{{ Storage::url($pelatihan->thumbnail) }}" alt="{{ $pelatihan->judul }}" class="w-full h-48 object-cover">
+                        @else
+                            <div class="w-full h-48 bg-surface-1 flex items-center justify-center">
+                                <svg class="w-12 h-12 text-border" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                <span>{{ $pelatihan->tanggal->format('d M Y') }} · {{ \Carbon\Carbon::parse($pelatihan->jam)->format('H:i') }} WIB</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                <span class="line-clamp-1">{{ $pelatihan->lokasi }}</span>
-                            </div>
-                        </div>
+                        @endif
                         
-                        <!-- Quota Progress -->
-                        <div class="mt-auto">
-                            @if($quota > 0)
-                                <div class="flex items-center justify-between text-xs mb-1.5">
-                                    <span class="font-medium text-ink-muted">Kuota Pendaftaran</span>
-                                    <span class="font-bold text-ink">{{ $approved }} / {{ $quota }} Peserta</span>
-                                </div>
-                                <div class="w-full h-1.5 bg-surface-2 rounded-full overflow-hidden mb-4">
-                                    <div class="h-full bg-primary transition-all duration-300" style="width: {{ $percentage }}%"></div>
-                                </div>
-                            @else
-                                <div class="mb-4 text-xs font-semibold text-success flex items-center gap-1">
-                                    <span class="w-1.5 h-1.5 bg-success rounded-full"></span>
-                                    Kuota Terbuka / Tanpa Batas
-                                </div>
-                            @endif
+                        <div class="p-6 flex-1 flex flex-col">
+                            <!-- Category Badge -->
+                            <div class="mb-4">
+                                <span class="inline-block px-2.5 py-0.5 rounded-sm bg-surface-1 text-xs font-semibold text-ink-muted border border-border">
+                                    {{ $pelatihan->kategori->nama_kategori }}
+                                </span>
+                            </div>
                             
-                            @if($isFull || $pelatihan->status === 'closed')
-                                <button disabled class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-surface-2 text-ink-muted border border-border text-sm font-semibold rounded-sm cursor-not-allowed">
-                                    Sudah Penuh
-                                </button>
-                            @else
-                                @guest
-                                    <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-[var(--color-ink)] !text-[var(--color-canvas)] hover:opacity-90 text-sm font-semibold rounded-sm transition-colors duration-200 hover:no-underline">
-                                        Login Untuk Mendaftar
-                                    </a>
+                            <!-- Title -->
+                            <h4 class="text-xl font-bold text-ink mb-3 line-clamp-2 leading-snug">
+                                {{ $pelatihan->judul }}
+                            </h4>
+                            
+                            <p class="text-sm text-ink-muted mb-6 line-clamp-3 leading-relaxed">
+                                {{ $pelatihan->deskripsi }}
+                            </p>
+                            
+                            <!-- Info Grid -->
+                            <div class="space-y-2 mb-6 border-t border-surface-2 pt-4 text-xs text-ink">
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                    <span>Narasumber: <strong class="font-semibold">{{ $pelatihan->narasumber }}</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    <span>{{ $pelatihan->tanggal->format('d M Y') }} · {{ \Carbon\Carbon::parse($pelatihan->jam)->format('H:i') }} WIB</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-ink-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                    <span class="line-clamp-1">{{ $pelatihan->lokasi }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Quota Progress -->
+                            <div class="mt-auto">
+                                @if($quota > 0)
+                                    <div class="flex items-center justify-between text-xs mb-1.5">
+                                        <span class="font-medium text-ink-muted">Kuota Pendaftaran</span>
+                                        <span class="font-bold text-ink">{{ $approved }} / {{ $quota }} Peserta</span>
+                                    </div>
+                                    <div class="w-full h-1.5 bg-surface-2 rounded-full overflow-hidden mb-4">
+                                        <div class="h-full bg-primary transition-all duration-300" style="width: {{ $percentage }}%"></div>
+                                    </div>
                                 @else
-                                    <a href="{{ route('user.pelatihan.show', $pelatihan->id) }}" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-primary !text-white hover:bg-primary-hover text-sm font-semibold rounded-sm transition-colors duration-200 hover:no-underline">
-                                        Lihat Detail Kelas
-                                    </a>
-                                @endguest
-                            @endif
+                                    <div class="mb-4 text-xs font-semibold text-success flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 bg-success rounded-full"></span>
+                                        Kuota Terbuka / Tanpa Batas
+                                    </div>
+                                @endif
+                                
+                                @if($isFull || $pelatihan->status === 'closed')
+                                    <button disabled class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-surface-2 text-ink-muted border border-border text-sm font-semibold rounded-sm cursor-not-allowed">
+                                        Sudah Penuh
+                                    </button>
+                                @else
+                                    @guest
+                                        <a href="{{ route('login') }}" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-[var(--color-ink)] !text-[var(--color-canvas)] hover:opacity-90 text-sm font-semibold rounded-sm transition-colors duration-200 hover:no-underline">
+                                            Login Untuk Mendaftar
+                                        </a>
+                                    @else
+                                        <a href="{{ route('user.pelatihan.show', $pelatihan->id) }}" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-primary !text-white hover:bg-primary-hover text-sm font-semibold rounded-sm transition-colors duration-200 hover:no-underline">
+                                            Lihat Detail Kelas
+                                        </a>
+                                    @endguest
+                                @endif
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            @empty
-                <div class="col-span-full card p-12 text-center bg-canvas border border-border rounded-lg shadow-card">
-                    <p class="text-ink-muted font-medium">Saat ini tidak ada pelatihan aktif yang terbit.</p>
-                </div>
-            @endforelse
+                @empty
+                    <div class="w-full card p-12 text-center bg-canvas border border-border rounded-lg shadow-card">
+                        <p class="text-ink-muted font-medium">Saat ini tidak ada pelatihan aktif yang terbit.</p>
+                    </div>
+                @endforelse
+            </div>
         </div>
     </div>
 </section>

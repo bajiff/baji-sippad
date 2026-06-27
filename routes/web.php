@@ -20,7 +20,6 @@ Route::get('/', function () {
     $latestTrainings = \App\Models\Pelatihan::with(['kategori'])
         ->whereIn('status', ['publish', 'closed'])
         ->latest()
-        ->take(6)
         ->get();
 
     $stats = [
