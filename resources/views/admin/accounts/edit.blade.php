@@ -48,11 +48,17 @@
                             <option selected>{{ ucfirst($account->role) }} (Akun Sendiri)</option>
                         </select>
                         <p class="text-[10px] text-[var(--color-ink-muted)] mt-1">Anda tidak dapat mengubah role akun Anda sendiri.</p>
-                    @else
+                    @elseif(auth()->user()->isSuperAdmin())
                         <select id="role" name="role" required class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
                             <option value="user" {{ old('role', $account->role) == 'user' ? 'selected' : '' }}>User (Peserta)</option>
                             <option value="admin" {{ old('role', $account->role) == 'admin' ? 'selected' : '' }}>Admin</option>
                         </select>
+                    @else
+                        <input type="hidden" name="role" value="{{ $account->role }}">
+                        <select disabled class="w-full px-3 py-2 border border-[var(--color-border)] bg-[var(--color-surface-1)] rounded text-sm text-[var(--color-ink-muted)]">
+                            <option selected>{{ ucfirst($account->role) }}</option>
+                        </select>
+                        <p class="text-[10px] text-[var(--color-ink-muted)] mt-1">Hanya Superadmin yang dapat mengubah role akun.</p>
                     @endif
                     @error('role') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
                 </div>
@@ -72,24 +78,14 @@
                     @error('tanggal_lahir') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
                 </div>
                 <div class="flex items-center">
-                    @if(auth()->user()->isSuperAdmin())
-                        @if($account->id === auth()->id())
-                            <div class="mt-5">
-                                <label class="flex items-center gap-2 text-sm text-[var(--color-ink-muted)]">
-                                    <input type="checkbox" checked disabled class="rounded border-[var(--color-border)] bg-[var(--color-surface-1)]">
-                                    <span class="font-medium">Superadmin (Akun Anda)</span>
-                                </label>
-                                <p class="text-[10px] text-[var(--color-ink-muted)] mt-1">Anda tidak dapat menonaktifkan status Superadmin Anda sendiri.</p>
-                            </div>
-                        @else
-                            <div class="mt-5">
-                                <label class="flex items-center gap-2 text-sm text-[var(--color-ink)] cursor-pointer">
-                                    <input type="checkbox" name="is_superadmin" value="1" {{ old('is_superadmin', $account->isSuperAdmin()) ? 'checked' : '' }} class="rounded border-[var(--color-border)] focus:ring-[var(--color-link)]">
-                                    <span class="font-medium">Setel sebagai Superadmin</span>
-                                </label>
-                                <p class="text-[10px] text-[var(--color-ink-muted)] mt-1 ml-5">Superadmin memiliki hak penuh yang tidak dapat diubah oleh admin biasa.</p>
-                            </div>
-                        @endif
+                    @if($account->isSuperAdmin())
+                        <div class="mt-5">
+                            <label class="flex items-center gap-2 text-sm text-[var(--color-ink-muted)]">
+                                <input type="checkbox" checked disabled class="rounded border-[var(--color-border)] bg-[var(--color-surface-1)]">
+                                <span class="font-medium">Superadmin (Status Permanen)</span>
+                            </label>
+                            <p class="text-[10px] text-[var(--color-ink-muted)] mt-1">Status Superadmin bersifat permanen dan tidak dapat dibuat/diubah melalui antarmuka ini.</p>
+                        </div>
                     @endif
                 </div>
             </div>

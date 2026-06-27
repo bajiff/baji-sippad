@@ -60,6 +60,10 @@ class AccountController extends Controller
     {
         $currentUser = auth()->user();
 
+        if (!$currentUser->isSuperAdmin() && $request->input('role') === 'admin') {
+            return back()->withInput()->withErrors(['role' => 'Admin biasa tidak memiliki hak akses untuk membuat akun dengan role Admin.']);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
@@ -78,13 +82,8 @@ class AccountController extends Controller
             'no_hp' => $validated['no_hp'] ?? null,
             'alamat' => $validated['alamat'] ?? null,
             'tanggal_lahir' => $validated['tanggal_lahir'] ?? null,
-            'is_superadmin' => false, // Default false, normal admin cannot create superadmin
+            'is_superadmin' => false,
         ];
-
-        // Only superadmin can create another superadmin from backend if explicitly specified
-        if ($currentUser->isSuperAdmin() && $request->boolean('is_superadmin')) {
-            $userData['is_superadmin'] = true;
-        }
 
         User::create($userData);
 
@@ -118,6 +117,10 @@ class AccountController extends Controller
             return redirect()->route('admin.accounts.index')->with('error', 'Superadmin (admin utama) tidak bisa diubah oleh admin biasa.');
         }
 
+        if (!$currentUser->isSuperAdmin() && $request->input('role') === 'admin' && $account->role !== 'admin') {
+            return back()->withInput()->withErrors(['role' => 'Admin biasa tidak memiliki hak akses untuk menjadikan akun sebagai Admin.']);
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => [
@@ -143,13 +146,6 @@ class AccountController extends Controller
 
         if (!empty($validated['password'])) {
             $account->password = Hash::make($validated['password']);
-        }
-
-        // Only superadmin can toggle superadmin status, and cannot toggle off themselves to prevent lockout
-        if ($currentUser->isSuperAdmin()) {
-            if ($account->id !== $currentUser->id) {
-                $account->is_superadmin = $request->boolean('is_superadmin');
-            }
         }
 
         $account->save();
