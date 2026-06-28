@@ -87,6 +87,8 @@ class PelatihanController extends Controller
 
         if ($pelatihan->isFull() && $pelatihan->status === 'publish') {
             $pelatihan->update(['status' => 'closed']);
+        } elseif (!$pelatihan->isFull() && $pelatihan->status === 'closed') {
+            $pelatihan->update(['status' => 'publish']);
         }
 
         return redirect()->route('admin.pelatihan.index')->with('success', 'Pelatihan berhasil diperbarui.');
