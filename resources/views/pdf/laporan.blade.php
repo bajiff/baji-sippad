@@ -144,7 +144,7 @@
     <div class="header">
         <div class="logo">SIPPAD</div>
         <h1 class="title">Laporan Perkembangan Pelatihan</h1>
-        <div class="subtitle">Sistem Pendaftaran Pelatihan Anak Desa · Pemerintah Desa Sari Mukti</div>
+        <div class="subtitle">Sistem Pendaftaran Pelatihan Anak Desa · Pemerintah Desa {{ $pimpinan->nama_desa ?? 'Sari Mukti' }}</div>
     </div>
 
     <table class="meta-info">
@@ -246,10 +246,10 @@
             <td class="signature-col"></td>
             <td class="signature-col">
                 <div class="signature-box">
-                    <div>Desa Sari Mukti, {{ now()->translatedFormat('d F Y') }}</div>
-                    <div style="font-weight: bold; margin-top: 5px;">Kepala Desa Sari Mukti</div>
+                    <div>{{ $pimpinan->nama_desa ?? 'Desa Sari Mukti' }}, {{ now()->translatedFormat('d F Y') }}</div>
+                    <div style="font-weight: bold; margin-top: 5px;">Kepala Desa</div>
                     <div class="signature-line"></div>
-                    <div style="font-weight: bold;">Pemerintah Desa Sari Mukti</div>
+                    <div style="font-weight: bold;">{{ $pimpinan->nama_kepala_desa ?? 'Pemerintah Desa Sari Mukti' }}</div>
                 </div>
             </td>
         </tr>

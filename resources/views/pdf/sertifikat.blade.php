@@ -143,10 +143,10 @@
                     </td>
                     <td class="footer-col">
                         <div style="height: 20px; font-family: 'Helvetica', sans-serif; font-size: 9.5px; color: #6e6e6e; margin-bottom: 10px;">
-                            Desa Karangduren, {{ $sertifikat->tanggal_terbit->format('d F Y') }}
+                            {{ $pimpinan->nama_desa ?? 'Desa Suranenggala Kidul' }}, {{ $sertifikat->tanggal_terbit->format('d F Y') }}
                         </div>
                         <div class="signature-line"></div>
-                        <div class="signature-title"><strong style="color: #1b1b1b;">Pemerintah Desa Karangduren</strong></div>
+                        <div class="signature-title"><strong style="color: #1b1b1b;">{{ $pimpinan->nama_kepala_desa ?? 'Pemerintah Desa Suranenggala Kidul' }}</strong></div>
                         <div class="signature-title">Kepala Desa</div>
                     </td>
                 </tr>

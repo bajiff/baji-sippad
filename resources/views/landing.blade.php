@@ -345,7 +345,7 @@
                 <ul class="space-y-3 text-sm text-[var(--color-ink-muted)]">
                     <li class="flex items-start gap-2">
                         <svg class="w-5 h-5 text-[var(--color-ink-muted)] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        <span>Kantor Kepala Desa Karangduren, Jl. Pemuda No. 45, Kecamatan Karangduren, Kabupaten Malang, Jawa Timur</span>
+                        <span>Kantor Kepala Desa Suranenggala Kidul, Jl. Pemuda No. 45, Kecamatan Suranenggala, Kabupaten Malang, Jawa Timur</span>
                     </li>
                     <li class="flex items-center gap-2">
                         <svg class="w-5 h-5 text-[var(--color-ink-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>

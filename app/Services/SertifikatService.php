@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Kehadiran;
 use App\Models\Pelatihan;
+use App\Models\Pimpinan;
 use App\Models\Sertifikat;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -12,7 +13,6 @@ class SertifikatService
     /**
      * Generate sertifikat untuk semua peserta yang hadir pada pelatihan tertentu dan belum memiliki sertifikat.
      *
-     * @param Pelatihan $pelatihan
      * @return int Jumlah sertifikat yang berhasil digenerate
      */
     public function generateForPelatihan(Pelatihan $pelatihan): int
@@ -26,7 +26,7 @@ class SertifikatService
 
         $count = 0;
         foreach ($kehadirans as $kehadiran) {
-            $nomor = 'SIPPAD-' . $pelatihan->id . '-' . str_pad($kehadiran->id, 4, '0', STR_PAD_LEFT) . '-' . date('Y');
+            $nomor = 'SIPPAD-'.$pelatihan->id.'-'.str_pad($kehadiran->id, 4, '0', STR_PAD_LEFT).'-'.date('Y');
 
             Sertifikat::create([
                 'kehadiran_id' => $kehadiran->id,
@@ -42,13 +42,13 @@ class SertifikatService
     /**
      * Membuat file PDF sertifikat resmi.
      *
-     * @param Sertifikat $sertifikat
      * @return \Barryvdh\DomPDF\PDF
      */
     public function generatePdf(Sertifikat $sertifikat)
     {
         $kehadiran = $sertifikat->kehadiran->load(['pendaftaran.user', 'pendaftaran.pelatihan']);
+        $pimpinan = Pimpinan::first();
 
-        return Pdf::loadView('pdf.sertifikat', compact('sertifikat', 'kehadiran'));
+        return Pdf::loadView('pdf.sertifikat', compact('sertifikat', 'kehadiran', 'pimpinan'));
     }
 }
