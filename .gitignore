@@ -1,51 +1,34 @@
-*.log
-.DS_Store
-.env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-/.codex
-/.cursor/
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
+# ==============================================================================
+# SIPPAD (Sistem Informasi Pelatihan dan Pendaftaran Desa) — .gitignore
+# ==============================================================================
+
+# --- 1. Laravel Core & Environment ---
+/.env
+/.env.*
+!/.env.example
+!/.env.ci
+/vendor/
 /auth.json
-/node_modules
-/public/build
-/public/fonts-manifest.dev.json
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
-_ide_helper.php
+*.log
+/_ide_helper.php
+/_ide_helper_models.php
+/.phpstorm.meta.php
+/.phpactor.json
 Homestead.json
 Homestead.yaml
-Thumbs.db
-/private
-/docs
 
-# --- Tambahan SIPPAD ---
-
-# Database Lokal (Jangan push DB development)
-/database/*.sqlite
-/database/*.sqlite3
-/database/*.db
-
-# Node.js / NPM Logs
-npm-debug.log
-yarn-error.log
-yarn-debug.log
-.pnpm-debug.log
-
-# Laravel Storage & Logs Caches
+# --- 2. Laravel Storage, Caches, & Public Assets ---
+/public/build/
+/public/hot/
+/public/storage
+/public/fonts-manifest.dev.json
+/storage/*.key
+/storage/pail/
+/storage/debugbar/
 /storage/app/public/*
 !/storage/app/public/.gitignore
-/storage/framework/cache/data/*
-!/storage/framework/cache/data/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
 /storage/framework/sessions/*
 !/storage/framework/sessions/.gitignore
 /storage/framework/views/*
@@ -53,13 +36,67 @@ yarn-debug.log
 /storage/logs/*
 !/storage/logs/.gitignore
 
-# IDE & Tool Meta
-_ide_helper_models.php
-.phpstorm.meta.php
-.fleet/
+# --- 3. Testing, Debugging, & Binaries (PHPUnit / Pest / PHP) ---
+/.phpunit.cache
+/.phpunit.result.cache
+/.pest/
+phpunit.xml.bak
+*.phar
+/composer.phar
 
-# OS Generated Files
+# --- 4. Database Lokal (SQLite & Dev Journals) ---
+/database/*.sqlite
+/database/*.sqlite3
+/database/*.db
+/database/*.sqlite-journal
+/database/*.db-journal
+/database/*.sqlite-shm
+/database/*.sqlite-wal
+
+# --- 5. Frontend & Node.js (Vite / Alpine.js / Tailwind CSS) ---
+/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+/.npm
+/.eslintcache
+/.stylelintcache
+/dist/
+/.vite/
+
+# --- 6. SIPPAD Specifics (Laporan Export & Scratch Files) ---
+# Mengabaikan direktori dan berkas hasil ekspor Laporan (Excel, CSV, PDF)
+/report/
+/reports/
+/export/
+/exports/
+laporan-pelatihan.*
+
+# --- 7. AI Agent Instructions & Template Documentation ---
+# Mengabaikan berkas instruksi AI dan template lokal agar repositori git tetap bersih
+AGENTS.md
+CLAUDE.md
+/.gemini/
+/.codex
+/.cursor/
+/.cursorrules
+/.windsurfrules
+/.aidev/
+baji-readme-template-*.md
+*-template-project.md
+
+# --- 8. IDE, Editor, & OS Generated Files ---
+.DS_Store
 .AppleDouble
 .LSOverride
+Thumbs.db
 ehthumbs.db
 Desktop.ini
+/.idea/
+/.vscode/
+/.nova/
+/.zed/
+/.fleet/
+/private
+baji-readme-template-project.md
