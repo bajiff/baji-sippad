@@ -142,7 +142,7 @@
             z-index: 10;
             text-align: center;
             padding-top: 30px;
-            padding-bottom: 110px;
+            padding-bottom: 30px;
         }
         .title-main {
             font-size: 42px;
@@ -263,30 +263,17 @@
             <div class="role-title">Peserta</div>
 
             <div class="reason-text">
-                Atas partisipasi aktif dan keberhasilannya menyelesaikan pelatihan <span class="training-highlight">"{{ $kehadiran->pendaftaran->pelatihan->judul }}"</span> yang diselenggarakan oleh Sistem Pendaftaran Pelatihan Anak Desa (SIPPAD) pada tanggal {{ $kehadiran->pendaftaran->pelatihan->tanggal->format('d F Y') }} bertempat di {{ $kehadiran->pendaftaran->pelatihan->lokasi }} dengan narasumber  <span class="training-highlight">"{{ $kehadiran->pendaftaran->pelatihan->narasumber }}"</span>
+                Atas partisipasi aktif dan keberhasilannya menyelesaikan pelatihan <span class="training-highlight">"{{ $kehadiran->pendaftaran->pelatihan->judul }}"</span> yang diselenggarakan oleh Sistem Pendaftaran Pelatihan Anak Desa (SIPPAD) pada tanggal {{ $kehadiran->pendaftaran->pelatihan->tanggal->format('d F Y') }} bertempat di {{ $kehadiran->pendaftaran->pelatihan->lokasi }} dengan narasumber<span class="training-highlight"> "{{ $kehadiran->pendaftaran->pelatihan->narasumber }}"</span>
+            </div>
+
+            <!-- Ketua Pelaksana Section -->
+            <div style="margin-top: 25px; text-align: center;">
+                <div style="font-size: 13px; color: #555555; margin: 50px 0px;">Ketua Pelaksana</div>
+                <div style="font-size: 15px; font-weight: bold; color: #111111;">
+                    <span style="border-bottom: 1px solid #111111; display: inline-block; padding-bottom: 1px;">{{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ?? 'Ahmad Fauzi, S.T.' }}</span>
+                </div>
             </div>
         </div>
-
-        <!-- Signatures Section -->
-        <table class="footer-table">
-            <tr>
-                <td class="footer-col" style="width: 33%;">
-                    <div class="sig-name">{{ $kehadiran->pendaftaran->pelatihan->narasumber }}</div>
-                    <div class="sig-title">Narasumber Pelatihan</div>
-                </td>
-                <td class="footer-col" style="width: 34%;">
-                    <div style="font-family: 'Georgia', 'Times New Roman', serif; font-style: italic; font-size: 20px; color: #111111; margin-bottom: 2px;">
-                        {{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ?? 'Ahmad Fauzi, S.T.' }}
-                    </div>
-                    <div class="sig-name">{{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ?? 'Ahmad Fauzi, S.T.' }}</div>
-                    <div class="sig-title">Ketua Pelaksana</div>
-                </td>
-                <td class="footer-col" style="width: 33%;">
-                    <div class="sig-name">{{ $pimpinan->nama_kepala_desa ?? 'Dr. Baji De Lovro, M.Kom.' }}</div>
-                    <div class="sig-title">Kepala {{ $pimpinan->nama_desa ?? 'Desa Baji De Lovro' }}</div>
-                </td>
-            </tr>
-        </table>
     </div>
 </body>
 </html>
