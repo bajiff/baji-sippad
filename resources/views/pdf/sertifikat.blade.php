@@ -247,11 +247,6 @@
         <div class="gold-line-bottom"></div>
 
         <!-- Circular Emblem Badge Logo -->
-        <div class="badge-logo">
-            <div class="badge-text-top">Sistem Pendaftaran<br>Pelatihan Desa</div>
-            <div class="badge-title">SIPPAD</div>
-            <div class="badge-est">* EST. 2024 *</div>
-        </div>
 
         <!-- Main Content Area -->
         <div class="content-area">
@@ -274,20 +269,18 @@
         <!-- Signatures Section -->
         <table class="footer-table">
             <tr>
-                <td class="footer-col" style="width: {{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ? '33%' : '50%' }};">
+                <td class="footer-col" style="width: 33%;">
                     <div class="sig-name">{{ $kehadiran->pendaftaran->pelatihan->narasumber }}</div>
                     <div class="sig-title">Narasumber Pelatihan</div>
                 </td>
-                @if($kehadiran->pendaftaran->pelatihan->ketua_pelaksana)
                 <td class="footer-col" style="width: 34%;">
                     <div style="font-family: 'Georgia', 'Times New Roman', serif; font-style: italic; font-size: 20px; color: #111111; margin-bottom: 2px;">
-                        {{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana }}
+                        {{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ?? 'Ahmad Fauzi, S.T.' }}
                     </div>
-                    <div class="sig-name">{{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana }}</div>
+                    <div class="sig-name">{{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ?? 'Ahmad Fauzi, S.T.' }}</div>
                     <div class="sig-title">Ketua Pelaksana</div>
                 </td>
-                @endif
-                <td class="footer-col" style="width: {{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ? '33%' : '50%' }};">
+                <td class="footer-col" style="width: 33%;">
                     <div class="sig-name">{{ $pimpinan->nama_kepala_desa ?? 'Dr. Baji De Lovro, M.Kom.' }}</div>
                     <div class="sig-title">Kepala {{ $pimpinan->nama_desa ?? 'Desa Baji De Lovro' }}</div>
                 </td>

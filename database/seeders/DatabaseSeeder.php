@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             KategoriSeeder::class,
             PelatihanSeeder::class,
+            KetuaPelaksanaSeeder::class,
         ]);
 
         // Create sample users
