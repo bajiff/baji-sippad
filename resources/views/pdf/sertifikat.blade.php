@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Sertifikat Pelatihan - {{ $sertifikat->nomor_sertifikat }}</title>
+    <title>Sertifikat Penghargaan - {{ $sertifikat->nomor_sertifikat }}</title>
     <style>
         @page {
             size: A4 landscape;
@@ -11,147 +11,279 @@
         html, body {
             margin: 0;
             padding: 0;
+            width: 100%;
             height: 100%;
-            background-color: #fdfcf7; /* Premium cream background */
-            font-family: 'Georgia', 'Times New Roman', Times, serif;
-            color: #1b1b1b;
+            background-color: #181818; /* Dark Luxury Background representing the outer dark frame */
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #111111;
         }
-        .border-outer {
+        .page-container {
             position: absolute;
-            top: 10mm;
-            left: 10mm;
-            right: 10mm;
-            bottom: 10mm;
-            border: 4px double #b89047; /* Elegant Gold Double Border */
-            background-color: #ffffff;
+            top: 8mm;
+            left: 8mm;
+            right: 8mm;
+            bottom: 8mm;
+            background-color: #ffffff; /* White center canvas */
+            border: 3px solid #c59b27; /* Gold border accent */
+            overflow: hidden;
+            box-sizing: border-box;
         }
-        .border-inner {
+        /* Geometric & Wavy Corner Accents matching the template */
+        .corner-tl {
             position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border: 1px solid #b89047;
-            padding: 10mm 15mm;
+            top: 0;
+            left: 0;
+            width: 85px;
+            height: 85px;
+            background: #181818;
+            border-bottom-right-radius: 60px;
+            border-right: 3px solid #c59b27;
+            border-bottom: 3px solid #c59b27;
+            z-index: 1;
+        }
+        .corner-tr {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 85px;
+            height: 85px;
+            background: #181818;
+            border-bottom-left-radius: 60px;
+            border-left: 3px solid #c59b27;
+            border-bottom: 3px solid #c59b27;
+            z-index: 1;
+        }
+        .corner-bl {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 85px;
+            height: 85px;
+            background: #181818;
+            border-top-right-radius: 60px;
+            border-right: 3px solid #c59b27;
+            border-top: 3px solid #c59b27;
+            z-index: 1;
+        }
+        .corner-br {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 85px;
+            height: 85px;
+            background: #181818;
+            border-top-left-radius: 60px;
+            border-left: 3px solid #c59b27;
+            border-top: 3px solid #c59b27;
+            z-index: 1;
+        }
+        /* Gold connecting accent lines */
+        .gold-line-top {
+            position: absolute;
+            top: 15px;
+            left: 100px;
+            right: 100px;
+            height: 2px;
+            background-color: #c59b27;
+        }
+        .gold-line-bottom {
+            position: absolute;
+            bottom: 15px;
+            left: 100px;
+            right: 100px;
+            height: 2px;
+            background-color: #c59b27;
+        }
+        /* Circular Emblem Badge Logo in top left */
+        .badge-logo {
+            position: absolute;
+            top: 28px;
+            left: 105px;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            border: 2px solid #c92a2a;
+            background: #ffffff;
             text-align: center;
+            padding: 8px 4px;
+            box-sizing: border-box;
+            z-index: 5;
         }
-        .header {
-            margin-top: 5px;
-        }
-        .logo {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            font-size: 13px;
+        .badge-text-top {
+            font-size: 5.5px;
             font-weight: bold;
-            letter-spacing: 6px;
-            color: #b89047;
-            margin-bottom: 10px;
+            color: #c92a2a;
+            letter-spacing: 0.3px;
+            line-height: 1.1;
+            margin-bottom: 4px;
             text-transform: uppercase;
         }
-        .title {
-            font-size: 34px;
-            font-weight: normal;
-            letter-spacing: 2px;
-            margin: 0 0 5px 0;
-            color: #1b1b1b;
-        }
-        .subtitle {
-            font-family: 'Helvetica', 'Arial', sans-serif;
+        .badge-title {
             font-size: 11px;
-            letter-spacing: 1.5px;
-            color: #6e6e6e;
+            font-weight: bold;
+            color: #ffffff;
+            background: #181818;
+            padding: 2px 5px;
+            border-radius: 3px;
+            margin: 2px auto;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+        .badge-est {
+            font-size: 6px;
+            color: #c59b27;
+            font-weight: bold;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+        /* Main Typography Structure */
+        .content-area {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding-top: 30px;
+        }
+        .title-main {
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: #111111;
+            margin: 0;
             text-transform: uppercase;
-            margin-bottom: 22px;
+        }
+        .title-sub {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 6px;
+            color: #333333;
+            margin: 2px 0 0 0;
+            text-transform: uppercase;
+        }
+        .cert-number {
+            font-size: 10px;
+            color: #666666;
+            letter-spacing: 1px;
+            margin-top: 6px;
+            margin-bottom: 18px;
+            text-transform: uppercase;
         }
         .given-to {
             font-size: 14px;
-            font-style: italic;
-            color: #6e6e6e;
-            margin-bottom: 6px;
+            color: #333333;
+            margin-bottom: 8px;
         }
-        .name {
-            font-size: 28px;
+        .recipient-name {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-style: italic;
             font-weight: bold;
-            border-bottom: 2px solid #b89047;
+            font-size: 36px;
+            color: #b8860b; /* Golden mustard color matching template */
             display: inline-block;
-            padding-bottom: 6px;
-            margin-bottom: 22px;
-            min-width: 380px;
-            color: #1b1b1b;
+            padding-bottom: 4px;
+            border-bottom: 2px solid #c59b27;
+            min-width: 450px;
+            margin-bottom: 12px;
         }
-        .reason {
-            font-size: 13.5px;
-            line-height: 1.75;
-            margin-bottom: 20px;
-            color: #2b2b2b;
-            max-width: 90%;
-            margin-left: auto;
-            margin-right: auto;
+        .as-role-label {
+            font-size: 13px;
+            color: #555555;
+            margin-bottom: 4px;
         }
-        .training-title {
+        .role-title {
+            font-size: 24px;
             font-weight: bold;
-            font-style: italic;
-            color: #b89047;
+            color: #111111;
+            margin-bottom: 16px;
         }
+        .reason-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 78%;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .training-highlight {
+            font-weight: bold;
+            color: #111111;
+        }
+        /* Footer Signatures matching template style */
         .footer-table {
-            width: 100%;
             position: absolute;
-            bottom: 8mm;
+            bottom: 25px;
             left: 0;
-            padding: 0 15mm;
+            width: 100%;
+            padding: 0 80px;
+            box-sizing: border-box;
+            z-index: 10;
         }
         .footer-col {
             width: 50%;
             text-align: center;
             vertical-align: bottom;
         }
-        .signature-line {
-            width: 200px;
-            border-bottom: 1px solid #b89047;
-            margin: 0 auto 5px auto;
+        .sig-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #111111;
+            margin-bottom: 3px;
         }
-        .signature-title {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            font-size: 10px;
-            color: #6e6e6e;
-            line-height: 1.4;
+        .sig-title {
+            font-size: 11px;
+            color: #555555;
         }
     </style>
 </head>
 <body>
-    <div class="border-outer">
-        <div class="border-inner">
-            <div class="header">
-                <div class="logo">S I P P A D</div>
-                <div class="title">SERTIFIKAT PENGHARGAAN</div>
-                <div class="subtitle">Nomor: {{ $sertifikat->nomor_sertifikat }}</div>
-            </div>
+    <div class="page-container">
+        <!-- Geometric Corner Accents -->
+        <div class="corner-tl"></div>
+        <div class="corner-tr"></div>
+        <div class="corner-bl"></div>
+        <div class="corner-br"></div>
+        
+        <!-- Gold Connecting Accent Lines -->
+        <div class="gold-line-top"></div>
+        <div class="gold-line-bottom"></div>
 
-            <div class="given-to">Diberikan kepada:</div>
-            <div class="name">{{ $kehadiran->pendaftaran->user->name }}</div>
-
-            <div class="reason">
-                Atas partisipasi aktif dan keberhasilannya menyelesaikan pelatihan <span class="training-title">"{{ $kehadiran->pendaftaran->pelatihan->judul }}"</span> yang diselenggarakan oleh Sistem Pendaftaran Pelatihan Anak Desa (SIPPAD) pada tanggal {{ $kehadiran->pendaftaran->pelatihan->tanggal->format('d F Y') }} bertempat di {{ $kehadiran->pendaftaran->pelatihan->lokasi }} dengan narasumber {{ $kehadiran->pendaftaran->pelatihan->narasumber }}.
-            </div>
-
-            <table class="footer-table">
-                <tr>
-                    <td class="footer-col">
-                        <div style="height: 50px;"></div>
-                        <div class="signature-line"></div>
-                        <div class="signature-title"><strong style="color: #1b1b1b;">{{ $kehadiran->pendaftaran->pelatihan->narasumber }}</strong></div>
-                        <div class="signature-title">Narasumber</div>
-                    </td>
-                    <td class="footer-col">
-                        <div style="height: 20px; font-family: 'Helvetica', sans-serif; font-size: 9.5px; color: #6e6e6e; margin-bottom: 10px;">
-                            {{ $pimpinan->nama_desa ?? 'Desa Suranenggala Kidul' }}, {{ $sertifikat->tanggal_terbit->format('d F Y') }}
-                        </div>
-                        <div class="signature-line"></div>
-                        <div class="signature-title"><strong style="color: #1b1b1b;">{{ $pimpinan->nama_kepala_desa ?? 'Pemerintah Desa Suranenggala Kidul' }}</strong></div>
-                        <div class="signature-title">Kepala Desa</div>
-                    </td>
-                </tr>
-            </table>
+        <!-- Circular Emblem Badge Logo -->
+        <div class="badge-logo">
+            <div class="badge-text-top">Sistem Pendaftaran<br>Pelatihan Desa</div>
+            <div class="badge-title">SIPPAD</div>
+            <div class="badge-est">* EST. 2024 *</div>
         </div>
+
+        <!-- Main Content Area -->
+        <div class="content-area">
+            <h1 class="title-main">SERTIFIKAT</h1>
+            <div class="title-sub">PENGHARGAAN</div>
+            <div class="cert-number">Nomor: {{ $sertifikat->nomor_sertifikat }}</div>
+
+            <div class="given-to">Dengan bangga dipersembahkan kepada:</div>
+            
+            <div class="recipient-name">{{ $kehadiran->pendaftaran->user->name }}</div>
+            
+            <div class="as-role-label">sebagai</div>
+            <div class="role-title">Peserta</div>
+
+            <div class="reason-text">
+                Atas partisipasi aktif dan keberhasilannya menyelesaikan pelatihan <span class="training-highlight">"{{ $kehadiran->pendaftaran->pelatihan->judul }}"</span> yang diselenggarakan oleh Sistem Pendaftaran Pelatihan Anak Desa (SIPPAD) pada tanggal {{ $kehadiran->pendaftaran->pelatihan->tanggal->format('d F Y') }} bertempat di {{ $kehadiran->pendaftaran->pelatihan->lokasi }} dengan narasumber  <span class="training-highlight">"{{ $kehadiran->pendaftaran->pelatihan->narasumber }}"</span>
+            </div>
+        </div>
+
+        <!-- Signatures Section -->
+        <table class="footer-table">
+            <tr>
+                <td class="footer-col">
+                    <div class="sig-name">{{ $kehadiran->pendaftaran->pelatihan->narasumber }}</div>
+                    <div class="sig-title">Narasumber Pelatihan</div>
+                </td>
+                <td class="footer-col">
+                    <div class="sig-name">{{ $pimpinan->nama_kepala_desa ?? 'Dr. Baji De Lovro, M.Kom.' }}</div>
+                    <div class="sig-title">Kepala {{ $pimpinan->nama_desa ?? 'Desa Baji De Lovro' }}</div>
+                </td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>

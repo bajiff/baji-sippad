@@ -13,7 +13,7 @@ class AdminSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@sippad.go.id'],
             [
-                'name' => 'Administrator',
+                'name' => 'Baji Admin',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
                 'is_superadmin' => true,

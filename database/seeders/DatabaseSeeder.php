@@ -21,9 +21,22 @@ class DatabaseSeeder extends Seeder
 
         // Create sample users
         $users = [
-            ['name' => 'Siti Aminah', 'email' => 'siti@example.com', 'no_hp' => '081234567891', 'alamat' => 'Dusun Selatan, Desa Sari Mukti', 'tanggal_lahir' => '1995-03-15'],
-            ['name' => 'Budi Cahyono', 'email' => 'budi@example.com', 'no_hp' => '081234567892', 'alamat' => 'Dusun Utara, Desa Sari Mukti', 'tanggal_lahir' => '1990-07-22'],
-            ['name' => 'Rina Wati', 'email' => 'rina@example.com', 'no_hp' => '081234567893', 'alamat' => 'Dusun Timur, Desa Sari Mukti', 'tanggal_lahir' => '1998-11-08'],
+            [
+                'name' => 'Siti Aminah', 'email' => 'siti@example.com', 'no_hp' => '081234567891', 'alamat' => 'Dusun Selatan, Desa Sari Mukti', 'tanggal_lahir' => '1995-03-15'
+            ],
+            [
+                'name' => 'Budi Cahyono', 'email' => 'budi@example.com', 'no_hp' => '081234567892', 'alamat' => 'Dusun Utara, Desa Sari Mukti', 'tanggal_lahir' => '1990-07-22'
+            ],
+            [
+                'name' => 'Rina Wati', 'email' => 'rina@example.com', 'no_hp' => '081234567893', 'alamat' => 'Dusun Timur, Desa Sari Mukti', 'tanggal_lahir' => '1998-11-08'
+            ],
+            [
+                'name' => 'Superman', 'email' => 'superman@example.com', 'no_hp' => '081234567893', 'alamat' => 'Dusun Timur, Desa Sari Mukti', 'tanggal_lahir' => '1998-11-08'
+            ],            [
+                'name' => 'Batman', 'email' => 'batman@example.com', 'no_hp' => '081234567893', 'alamat' => 'Dusun Timur, Desa Sari Mukti', 'tanggal_lahir' => '1998-11-08'
+            ],            [
+                'name' => 'Spiderman', 'email' => 'spiderman@example.com', 'no_hp' => '081234567893', 'alamat' => 'Dusun Timur, Desa Sari Mukti', 'tanggal_lahir' => '1998-11-08'
+            ],
         ];
 
         foreach ($users as $user) {
@@ -35,5 +48,7 @@ class DatabaseSeeder extends Seeder
                 ])
             );
         }
+
+        $this->call(DummyDataSeeder::class);
     }
 }
