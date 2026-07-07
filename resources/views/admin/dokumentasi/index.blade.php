@@ -89,7 +89,7 @@
                         <th class="p-3 font-semibold">Kategori</th>
                         <th class="p-3 font-semibold">Status</th>
                         <th class="p-3 font-semibold">Gambar</th>
-                        <th class="p-3 font-semibold text-center">Aksi (Upload / Hapus)</th>
+                        <th class="p-3 font-semibold text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-[var(--color-border)]">
@@ -107,36 +107,31 @@
                             <td class="p-3 align-top">
                                 <div class="flex flex-wrap gap-2">
                                     @forelse($p->dokumentasi as $d)
-                                        <div class="relative group w-14 h-14 rounded overflow-hidden border border-[var(--color-border)]">
+                                        <div class="w-14 h-14 rounded overflow-hidden border border-[var(--color-border)] bg-[var(--color-surface-1)]">
                                             <img src="{{ Storage::url($d->foto_kegiatan) }}" class="w-full h-full object-cover">
-                                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center gap-1 transition-opacity">
-                                                <a href="{{ route('admin.dokumentasi.edit', $d) }}" class="text-white hover:text-yellow-400" title="Edit Foto">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-                                                </a>
-                                                <form method="POST" action="{{ route('admin.dokumentasi.destroy', $d) }}" onsubmit="return confirm('Yakin hapus foto ini?')">
-                                                    @csrf @method('DELETE')
-                                                    <button type="submit" class="text-white hover:text-red-400" title="Hapus Foto">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                                    </button>
-                                                </form>
-                                            </div>
                                         </div>
                                     @empty
                                         <span class="text-xs text-[var(--color-ink-muted)] italic">Belum ada gambar</span>
                                     @endforelse
                                 </div>
                             </td>
-                            <td class="p-3 align-top text-center">
-                                @if(in_array($p->status, ['publish', 'closed', 'selesai']))
-                                    <form method="POST" action="{{ route('admin.dokumentasi.store') }}" enctype="multipart/form-data" class="flex flex-col items-center gap-1">
-                                        @csrf
-                                        <input type="hidden" name="pelatihan_id" value="{{ $p->id }}">
-                                        <input type="file" name="foto" required accept="image/*" class="w-full max-w-[150px] text-[10px] border border-[var(--color-border)] rounded px-1 py-1 bg-[var(--color-canvas)]">
-                                        <button type="submit" class="w-full max-w-[150px] px-2 py-1.5 bg-[var(--color-primary)] text-white text-[11px] rounded hover:bg-[var(--color-primary-hover)] font-medium">Upload Foto Baru</button>
-                                    </form>
-                                @else
-                                    <span class="text-[11px] text-red-500 font-medium">Harus Publish</span>
-                                @endif
+                            <td class="p-3 align-top text-right">
+                                <div class="flex flex-col gap-1.5 items-end">
+                                    @forelse($p->dokumentasi as $index => $d)
+                                        <div class="flex items-center justify-end gap-2">
+                                            @if($p->dokumentasi->count() > 1)
+                                                <span class="text-xs text-[var(--color-ink-muted)] font-mono">#{{ $index + 1 }}</span>
+                                            @endif
+                                            <a href="{{ route('admin.dokumentasi.edit', $d) }}" class="text-[var(--color-link)] hover:underline text-sm">Edit</a>
+                                            <form method="POST" action="{{ route('admin.dokumentasi.destroy', $d) }}" onsubmit="return confirm('Yakin hapus foto ini?')">
+                                                @csrf @method('DELETE')
+                                                <button type="submit" class="text-[var(--color-danger)] hover:underline text-sm">Hapus</button>
+                                            </form>
+                                        </div>
+                                    @empty
+                                        <span class="text-xs text-[var(--color-ink-muted)]">-</span>
+                                    @endforelse
+                                </div>
                             </td>
                         </tr>
                     @empty
