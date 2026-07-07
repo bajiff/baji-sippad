@@ -21,11 +21,11 @@
             position: absolute;
             top: 8mm;
             left: 8mm;
-            right: 8mm;
-            bottom: 8mm;
+            width: 281mm;
+            height: 194mm;
             background-color: #ffffff; /* White center canvas */
             border: 3px solid #c59b27; /* Gold border accent */
-            overflow: hidden;
+            overflow: visible;
             box-sizing: border-box;
         }
         /* Geometric & Wavy Corner Accents matching the template */
@@ -142,6 +142,7 @@
             z-index: 10;
             text-align: center;
             padding-top: 30px;
+            padding-bottom: 110px;
         }
         .title-main {
             font-size: 42px;
