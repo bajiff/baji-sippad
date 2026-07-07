@@ -45,11 +45,17 @@
                     @error('narasumber') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
                 </div>
                 <div>
-                    <label for="lokasi" class="block text-sm font-medium text-[var(--color-ink)] mb-1">Lokasi *</label>
-                    <input type="text" id="lokasi" name="lokasi" value="{{ old('lokasi') }}" required
+                    <label for="ketua_pelaksana" class="block text-sm font-medium text-[var(--color-ink)] mb-1">Ketua Pelaksana</label>
+                    <input type="text" id="ketua_pelaksana" name="ketua_pelaksana" value="{{ old('ketua_pelaksana') }}" placeholder="Contoh: Budi Santoso, S.Kom"
                            class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
-                    @error('lokasi') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
+                    @error('ketua_pelaksana') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
                 </div>
+            </div>
+            <div class="mb-4">
+                <label for="lokasi" class="block text-sm font-medium text-[var(--color-ink)] mb-1">Lokasi *</label>
+                <input type="text" id="lokasi" name="lokasi" value="{{ old('lokasi') }}" required
+                       class="w-full px-3 py-2 border border-[var(--color-border)] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-link)]">
+                @error('lokasi') <p class="mt-1 text-xs text-[var(--color-danger)]">{{ $message }}</p> @enderror
             </div>
             <div class="grid md:grid-cols-2 gap-4 mb-4">
                 <div>

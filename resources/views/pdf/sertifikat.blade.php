@@ -274,11 +274,20 @@
         <!-- Signatures Section -->
         <table class="footer-table">
             <tr>
-                <td class="footer-col">
+                <td class="footer-col" style="width: {{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ? '33%' : '50%' }};">
                     <div class="sig-name">{{ $kehadiran->pendaftaran->pelatihan->narasumber }}</div>
                     <div class="sig-title">Narasumber Pelatihan</div>
                 </td>
-                <td class="footer-col">
+                @if($kehadiran->pendaftaran->pelatihan->ketua_pelaksana)
+                <td class="footer-col" style="width: 34%;">
+                    <div style="font-family: 'Georgia', 'Times New Roman', serif; font-style: italic; font-size: 20px; color: #111111; margin-bottom: 2px;">
+                        {{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana }}
+                    </div>
+                    <div class="sig-name">{{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana }}</div>
+                    <div class="sig-title">Ketua Pelaksana</div>
+                </td>
+                @endif
+                <td class="footer-col" style="width: {{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ? '33%' : '50%' }};">
                     <div class="sig-name">{{ $pimpinan->nama_kepala_desa ?? 'Dr. Baji De Lovro, M.Kom.' }}</div>
                     <div class="sig-title">Kepala {{ $pimpinan->nama_desa ?? 'Desa Baji De Lovro' }}</div>
                 </td>

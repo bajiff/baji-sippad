@@ -16,6 +16,7 @@ class Pelatihan extends Model
         'judul',
         'deskripsi',
         'narasumber',
+        'ketua_pelaksana',
         'lokasi',
         'tanggal',
         'jam',
