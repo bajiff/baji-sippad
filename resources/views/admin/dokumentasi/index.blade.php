@@ -41,12 +41,18 @@
                     </div>
                     
                     @if(in_array($p->status, ['publish', 'closed', 'selesai']))
-                        <form method="POST" action="{{ route('admin.dokumentasi.store') }}" enctype="multipart/form-data" class="flex items-center gap-2">
-                            @csrf
-                            <input type="hidden" name="pelatihan_id" value="{{ $p->id }}">
-                            <input type="file" name="foto" required accept="image/*" class="text-sm border border-[var(--color-border)] rounded px-2 py-1 max-w-[200px]">
-                            <button type="submit" class="px-3 py-1.5 bg-[var(--color-primary)] text-white text-sm rounded hover:bg-[var(--color-primary-hover)] whitespace-nowrap">Upload Foto</button>
-                        </form>
+                        @if($p->dokumentasi->count() >= 5)
+                            <div class="px-3 py-1.5 bg-yellow-50 border border-yellow-200 text-yellow-700 rounded text-xs font-medium">
+                                Maksimal 5 Foto (Penuh)
+                            </div>
+                        @else
+                            <form method="POST" action="{{ route('admin.dokumentasi.store') }}" enctype="multipart/form-data" class="flex items-center gap-2">
+                                @csrf
+                                <input type="hidden" name="pelatihan_id" value="{{ $p->id }}">
+                                <input type="file" name="foto" required accept="image/*" class="text-sm border border-[var(--color-border)] rounded px-2 py-1 max-w-[200px]">
+                                <button type="submit" class="px-3 py-1.5 bg-[var(--color-primary)] text-white text-sm rounded hover:bg-[var(--color-primary-hover)] whitespace-nowrap">Upload Foto</button>
+                            </form>
+                        @endif
                     @else
                         <div class="px-3 py-1.5 bg-red-50 border border-red-200 text-red-600 rounded text-xs font-medium">
                             Harus di-publish terlebih dahulu untuk menambah foto
@@ -116,21 +122,40 @@
                                 </div>
                             </td>
                             <td class="p-3 align-top text-right">
-                                <div class="flex flex-col gap-1.5 items-end">
-                                    @forelse($p->dokumentasi as $index => $d)
-                                        <div class="flex items-center justify-end gap-2">
-                                            @if($p->dokumentasi->count() > 1)
-                                                <span class="text-xs text-[var(--color-ink-muted)] font-mono">#{{ $index + 1 }}</span>
-                                            @endif
-                                            <a href="{{ route('admin.dokumentasi.edit', $d) }}" class="text-[var(--color-link)] hover:underline text-sm">Edit</a>
-                                            <form method="POST" action="{{ route('admin.dokumentasi.destroy', $d) }}" onsubmit="return confirm('Yakin hapus foto ini?')">
-                                                @csrf @method('DELETE')
-                                                <button type="submit" class="text-[var(--color-danger)] hover:underline text-sm">Hapus</button>
-                                            </form>
+                                <div class="flex flex-col gap-2 items-end">
+                                    @if($p->dokumentasi->isNotEmpty())
+                                        <div class="flex flex-col gap-1.5 items-end w-full">
+                                            @foreach($p->dokumentasi as $index => $d)
+                                                <div class="flex items-center justify-end gap-2">
+                                                    @if($p->dokumentasi->count() > 1)
+                                                        <span class="text-xs text-[var(--color-ink-muted)] font-mono">#{{ $index + 1 }}</span>
+                                                    @endif
+                                                    <a href="{{ route('admin.dokumentasi.edit', $d) }}" class="text-[var(--color-link)] hover:underline text-sm">Edit</a>
+                                                    <form method="POST" action="{{ route('admin.dokumentasi.destroy', $d) }}" onsubmit="return confirm('Yakin hapus foto ini?')">
+                                                        @csrf @method('DELETE')
+                                                        <button type="submit" class="text-[var(--color-danger)] hover:underline text-sm">Hapus</button>
+                                                    </form>
+                                                </div>
+                                            @endforeach
                                         </div>
-                                    @empty
-                                        <span class="text-xs text-[var(--color-ink-muted)]">-</span>
-                                    @endforelse
+                                    @endif
+
+                                    <div class="w-full flex justify-end {{ $p->dokumentasi->isNotEmpty() ? 'pt-2 border-t border-[var(--color-border)]' : '' }}">
+                                        @if(in_array($p->status, ['publish', 'closed', 'selesai']))
+                                            @if($p->dokumentasi->count() >= 5)
+                                                <span class="text-[11px] text-yellow-700 bg-yellow-50 px-2 py-0.5 rounded border border-yellow-200 font-medium">Maks 5 Foto (Penuh)</span>
+                                            @else
+                                                <form method="POST" action="{{ route('admin.dokumentasi.store') }}" enctype="multipart/form-data" class="flex items-center gap-1">
+                                                    @csrf
+                                                    <input type="hidden" name="pelatihan_id" value="{{ $p->id }}">
+                                                    <input type="file" name="foto" required accept="image/*" class="w-[140px] text-[10px] border border-[var(--color-border)] rounded px-1 py-0.5 bg-[var(--color-canvas)]">
+                                                    <button type="submit" class="px-2 py-1 bg-[var(--color-primary)] text-white text-[11px] rounded hover:bg-[var(--color-primary-hover)] font-medium whitespace-nowrap">+ Tambah</button>
+                                                </form>
+                                            @endif
+                                        @else
+                                            <span class="text-[11px] text-red-500 font-medium">Harus Publish</span>
+                                        @endif
+                                    </div>
                                 </div>
                             </td>
                         </tr>

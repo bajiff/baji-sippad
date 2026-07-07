@@ -30,6 +30,11 @@ class DokumentasiController extends Controller
             'foto' => 'required|image|max:5120',
         ]);
 
+        $count = Dokumentasi::where('pelatihan_id', $validated['pelatihan_id'])->count();
+        if ($count >= 5) {
+            return redirect()->back()->withInput()->withErrors(['foto' => 'Pelatihan ini sudah mencapai batas maksimal 5 foto dokumentasi.']);
+        }
+
         $path = $request->file('foto')->store('dokumentasi', 'public');
 
         Dokumentasi::create([
@@ -52,6 +57,13 @@ class DokumentasiController extends Controller
             'pelatihan_id' => 'required|exists:pelatihan,id',
             'foto' => 'nullable|image|max:5120',
         ]);
+
+        if ($validated['pelatihan_id'] != $dokumentasi->pelatihan_id) {
+            $count = Dokumentasi::where('pelatihan_id', $validated['pelatihan_id'])->count();
+            if ($count >= 5) {
+                return redirect()->back()->withInput()->withErrors(['pelatihan_id' => 'Pelatihan tujuan sudah mencapai batas maksimal 5 foto dokumentasi.']);
+            }
+        }
 
         if ($request->hasFile('foto')) {
             if ($dokumentasi->foto_kegiatan) {
