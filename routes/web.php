@@ -121,6 +121,10 @@ Route::middleware(['auth', 'user'])->prefix('user')->name('user.')->group(functi
     Route::get('pendaftaran-saya', [App\Http\Controllers\User\PendaftaranController::class, 'index'])->name('pendaftaran.index');
     Route::post('pendaftaran/{pendaftaran}/presensi', [App\Http\Controllers\User\PendaftaranController::class, 'presensiMandiri'])->name('pendaftaran.presensi');
 
+    // Kehadiran
+    Route::get('kehadiran', [App\Http\Controllers\User\KehadiranController::class, 'index'])->name('kehadiran.index');
+    Route::post('kehadiran/{pendaftaran}', [App\Http\Controllers\User\KehadiranController::class, 'store'])->name('kehadiran.store');
+
     // Riwayat
     Route::get('riwayat', [RiwayatController::class, 'index'])->name('riwayat');
 

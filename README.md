@@ -5,11 +5,12 @@
 </p>
 
 <p align="center">
-  <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-13.8-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 13.8"></a>
+  <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-13.16.1-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel 13.16.1"></a>
   <a href="https://www.php.net/"><img src="https://img.shields.io/badge/PHP-8.3-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.3"></a>
   <a href="https://www.postgresql.org/"><img src="https://img.shields.io/badge/PostgreSQL-16.14-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL 16"></a>
   <a href="https://alpinejs.dev/"><img src="https://img.shields.io/badge/Alpine.js-3.x-8BC0D0?style=for-the-badge&logo=alpine.js&logoColor=white" alt="Alpine.js"></a>
-  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-4.x-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4"></a>
+  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-8.x-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 8"></a>
   <a href="https://www.w3.org/WAI/WCAG2AA-Conformance"><img src="https://img.shields.io/badge/WCAG_AA-Compliant-008000?style=for-the-badge&logo=w3c&logoColor=white" alt="WCAG AA"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License MIT"></a>
   <img src="https://img.shields.io/badge/Status-100%25%20Completed-success?style=for-the-badge" alt="Progress 100%">
@@ -19,7 +20,7 @@
 
 ## Introduction
 
-**SIPPAD (Sistem Informasi Pelatihan dan Pendaftaran Desa)** adalah platform aplikasi berbasis web modern yang dibangun menggunakan **Laravel 13.8 (PHP 8.3)** untuk mendigitalisasi, mengotomatisasi, dan mengelola seluruh siklus program pelatihan di tingkat desa. 
+**SIPPAD (Sistem Informasi Pelatihan dan Pendaftaran Desa)** adalah platform aplikasi berbasis web modern yang dibangun menggunakan **Laravel 13.16.1 (PHP 8.3)** untuk mendigitalisasi, mengotomatisasi, dan mengelola seluruh siklus program pelatihan di tingkat desa. 
 
 Sistem ini dirancang dengan arsitektur **Clean Service Layer**, mendukung kontrol akses berbasis peran (*Role-Based Access Control / RBAC*) yang ketat, pengelolaan presensi fleksibel, penerbitan sertifikat digital otomatis berformat A4 Landscape presisi, serta ekspor laporan eksekutif multi-format. Dengan antarmuka premium terinspirasi dari **Adobe Spectrum Design System** yang mendukung mode *Dark/Light* interaktif serta memenuhi standar aksesibilitas **WCAG AA**, SIPPAD menghadirkan pengalaman pengguna yang cepat, elegan, dan inklusif bagi aparatur maupun masyarakat desa.
 
@@ -41,7 +42,7 @@ Sistem ini dirancang dengan arsitektur **Clean Service Layer**, mendukung kontro
     - [:rocket: Deployment](#rocket-deployment)
   - [:cherry\_blossom: Community](#cherry_blossom-community)
     - [:fire: Contribution](#fire-contribution)
-    - `[:cactus: Branches](#cactus-branches)
+    - [:cactus: Branches](#cactus-branches)
     - [:exclamation: Guideline](#exclamation-guideline)
   - [:question: FAQ](#question-faq)
   - [:page\_facing\_up: Resources](#page_facing_up-resources)
@@ -59,7 +60,7 @@ SIPPAD hadir sebagai solusi transformasi digital untuk pemerintah desa (seperti 
 
 1. **Role-Based Access Control (RBAC) & Keamanan Lanjutan**
    - **Admin / Superadmin**: Memiliki hak akses penuh untuk manajemen kategori, kelas pelatihan, verifikasi peserta, presensi, manajemen sertifikat massal (*bulk action*), dan unduh laporan.
-   - **User / Peserta**: Akses untuk penelusuran katalog pelatihan, pendaftaran mandiri, pelacakan riwayat presensi, pengelolaan profil, serta unduh sertifikat digital.
+   - **User / Peserta**: Akses untuk penelusuran katalog pelatihan, pendaftaran mandiri, halaman **Kehadiran** mandiri, pelacakan riwayat presensi, pengelolaan profil, serta unduh sertifikat digital.
    - **Guest**: Akses halaman landing page interaktif dengan statistik real-time dan katalog pelatihan publik.
 
 2. **Arsitektur Service Layer yang Bersih (*Clean Architecture*)**
@@ -75,25 +76,33 @@ SIPPAD hadir sebagai solusi transformasi digital untuk pemerintah desa (seperti 
 4. **Sistem Presensi Fleksibel (Mandiri vs Admin)**
    - Admin dapat menentukan mode presensi untuk setiap pelatihan:
      - **Presensi Dikelola Admin**: Admin menandai kehadiran peserta secara manual atau massal.
-     - **Presensi Mandiri**: Peserta dapat melakukan konfirmasi kehadiran secara mandiri langsung dari halaman *Riwayat Pelatihan* atau *Detail Pelatihan* pada hari pelaksanaan.
+     - **Presensi Mandiri**: Peserta dapat melakukan konfirmasi kehadiran dari halaman **Kehadiran** khusus di sidebar dashboard peserta. Tombol presensi hanya aktif jika admin mengaktifkan mode `presensi_by = peserta` pada kelas pelatihan terkait.
 
-5. **Penerbitan Sertifikat Digital A4 Landscape Presisi (*DomPDF*)**
+5. **Manajemen Dokumentasi Foto Kegiatan (Kuota Maks 5)**
+   - Admin dapat mengunggah, mengedit, dan menghapus foto dokumentasi kegiatan per kelas pelatihan.
+   - **Kuota Maksimal 5 Foto**: Sistem membatasi jumlah foto per pelatihan secara ketat di sisi server (validasi `store` & `update`) maupun UI (tombol upload disembunyikan saat kuota penuh).
+   - Tampilan **Grid (Card)** dan **List** menyediakan aksi Upload, Edit, dan Hapus secara langsung di dalam grid foto.
+
+6. **Manajemen Data Pimpinan Desa**
+   - Modul pengaturan data pimpinan desa (Nama Desa & Nama Kepala Desa) yang terintegrasi langsung ke template sertifikat DomPDF.
+
+7. **Penerbitan Sertifikat Digital A4 Landscape Presisi (*DomPDF*)**
    - Pembuatan sertifikat otomatis dengan format nomor seri unik: `SIPPAD-[ID_PELATIHAN]-[NO_URUT]-[TAHUN]`.
    - **Anti-Page Break**: Layout PDF (`resources/views/pdf/sertifikat.blade.php`) dibangun menggunakan *Absolute Inset Positioning* (`top/bottom/left/right`), menjamin dokumen tercetak sempurna dalam 1 halaman A4 Landscape tanpa risiko terpotong ke halaman kedua.
    - **Bulk Actions via Alpine.js**: Admin dapat memilih banyak peserta sekaligus via checkbox interaktif untuk melakukan *Generate Sertifikat Massal* (sekaligus otomatis menyetel status kehadiran menjadi "Hadir") atau *Batalkan Sertifikat Massal*.
 
-6. **Ekspor Laporan Native & Analitik Komprehensif**
+8. **Ekspor Laporan Native & Analitik Komprehensif**
    - **Excel Native (.xlsx)**: Menggunakan library `maatwebsite/excel` dengan concern `FromView`, `ShouldAutoSize`, dan `WithTitle` untuk ekspor spreadsheet biner rapi dan profesional.
    - **PDF & CSV Export**: Pilihan ekspor dokumen PDF eksekutif atau raw CSV untuk keperluan audit dan pengolahan data lanjutan.
    - Filter laporan dinamis berdasarkan rincian bulan, tahun, dan kategori pelatihan.
 
-7. **Desain Premium, Dark/Light Mode, & WCAG AA Compliant**
+9. **Desain Premium, Dark/Light Mode, & WCAG AA Compliant**
    - Desain antarmuka modern terinspirasi dari **Adobe Spectrum Design System** dengan penggunaan variabel CSS kustom (`resources/css/app.css`).
    - Toggle **Dark / Light Mode** interaktif di navbar berbasis Alpine.js dengan penyimpanan preferensi lokal.
    - **Aksesibilitas WCAG AA**: Rasio kontras warna utama (Primary Red `#E00D00`), warna teks redup (`#595959`), serta warna fungsional (success, warning, danger, info) diuji untuk selalu melampaui rasio kontras 4.5:1 (untuk teks normal) dan 4.8:1 (untuk elemen antarmuka).
    - Dukungan indikator fokus visual (`*:focus-visible`) dan preferensi reduksi animasi (`prefers-reduced-motion: reduce`).
 
-8. **Sistem Notifikasi Database Real-Time**
+10. **Sistem Notifikasi Database Real-Time**
    - Integrasi *Laravel Database Notifications* yang memicu pemberitahuan otomatis saat status pendaftaran berubah (Menunggu → Terverifikasi / Ditolak).
    - Komponen lonceng notifikasi (*Bell Icon*) interaktif dengan *dropdown list* dan fitur *Mark All as Read* pada navbar Admin maupun User.
 
@@ -195,40 +204,45 @@ Struktur direktori utama SIPPAD diatur mengikuti konvensi terbaik Laravel 13 den
 ```bash
 sippad/
 ├── app/
+│   ├── Exports/               # Export classes (LaporanExport — FromView, ShouldAutoSize, WithTitle)
 │   ├── Http/
 │   │   ├── Controllers/
-│   │   │   ├── Admin/         # Controller Admin (Pelatihan, Kategori, Pendaftaran, Laporan)
+│   │   │   ├── Admin/         # 11 Controller Admin (Dashboard, Pelatihan, Kategori, Pendaftaran,
+│   │   │   │                  #   Kehadiran, Dokumentasi, Sertifikat, Laporan, Pimpinan, Akun, Profil)
 │   │   │   ├── Auth/          # Controller Autentikasi (Login, Register, Logout)
-│   │   │   └── User/          # Controller User (Dashboard, Profil, Riwayat, Presensi)
-│   │   └── Middleware/        # AdminMiddleware, UserMiddleware, GuestMiddleware
-│   ├── Models/                # User, Pelatihan, Pendaftaran, Kehadiran, Sertifikat, Dokumentasi, KategoriPelatihan
+│   │   │   └── User/          # 7 Controller User (Dashboard, Pelatihan, Pendaftaran, Kehadiran,
+│   │   │                      #   Riwayat, Sertifikat, Profil)
+│   │   └── Middleware/        # AdminMiddleware, UserMiddleware
+│   ├── Models/                # 8 Model: User, Pelatihan, Pendaftaran, Kehadiran, Sertifikat,
+│   │                          #   Dokumentasi, KategoriPelatihan, Pimpinan
 │   ├── Notifications/         # PendaftaranStatusNotification (Database Channel)
 │   ├── Providers/             # AppServiceProvider, dll.
 │   └── Services/              # Service Layer: PendaftaranService, SertifikatService, LaporanService
 ├── database/
-│   ├── migrations/            # 10+ skema migrasi relasional database
+│   ├── migrations/            # 15 skema migrasi relasional database
 │   └── seeders/               # AdminSeeder, KategoriSeeder, PelatihanSeeder, DatabaseSeeder
 ├── docs/
 │   ├── PROGRESS.md            # Laporan progres & status audit implementasi SIPPAD (100% Completed)
 │   └── SIPPAD-Implementation-Planning.md # Spesifikasi & perencanaan arsitektur proyek
 ├── resources/
 │   ├── css/
-│   │   └── app.css            # Desain Token Adobe Spectrum, WCAG AA utilities, & Tailwind config
+│   │   └── app.css            # Desain Token Adobe Spectrum, WCAG AA utilities, & Tailwind v4 config
 │   ├── js/
 │   │   └── app.js             # Bootstrap Alpine.js & interaktivitas komponen
 │   └── views/
-│       ├── admin/             # Halaman dasbor & manajemen Admin
-│       ├── components/        # Komponen Blade reusable (navbar, sidebar, card, badge, modal)
+│       ├── admin/             # Halaman dasbor & manajemen Admin (11 modul)
+│       ├── components/        # 9 Komponen Blade reusable (navbar, sidebar, card, badge, modal, dll.)
+│       ├── excel/             # Template Blade untuk ekspor Excel native (.xlsx)
 │       ├── layouts/           # Layout utama: app, admin, user, guest
 │       ├── pdf/               # Template cetak DomPDF: sertifikat.blade.php (A4 Landscape Absolute)
-│       ├── user/              # Halaman dasbor & pendaftaran Peserta
+│       ├── user/              # Halaman dasbor, kehadiran, & pendaftaran Peserta (7 modul)
 │       └── landing.blade.php  # Halaman beranda publik dengan Dark/Light toggle
 ├── tests/
 │   ├── Feature/               # Pengujian fungsional end-to-end (Auth, CRUD, Register, Export)
 │   └── Unit/                  # Pengujian unit Service Layer & kalkulasi model
 ├── .env.example               # Contoh konfigurasi variabel lingkungan
 ├── composer.json              # Daftar dependensi PHP (Laravel 13, DomPDF, Maatwebsite/Excel)
-├── package.json               # Daftar dependensi Node.js (Vite, Alpine.js, TailwindCSS)
+├── package.json               # Daftar dependensi Node.js (Vite 8, Alpine.js, Tailwind CSS 4)
 └── README.md                  # Dokumentasi proyek (file ini)
 ```
 
@@ -239,9 +253,12 @@ sippad/
 | 1 | `app/Services/PendaftaranService.php` | **Service Layer** | Mengenkapsulasi logika verifikasi, penolakan, pembatalan, serta proteksi kuota pelatihan. |
 | 2 | `app/Services/SertifikatService.php` | **Service Layer** | Menangani kalkulasi kelayakan presensi, pembuatan nomor seri unik, dan *bulk generator*. |
 | 3 | `app/Services/LaporanService.php` | **Service Layer** | Mengolah agregasi data analitik dan penghubung ekspor Excel (`.xlsx`), PDF, dan CSV. |
-| 4 | `resources/views/pdf/sertifikat.blade.php` | **Presentation / PDF** | Template sertifikat A4 Landscape berbasis *Absolute Inset Positioning* bebas terpotong. |
-| 5 | `app/Notifications/PendaftaranStatusNotification.php` | **Notification Layer** | Mengirimkan notifikasi database real-time ke dasbor peserta saat status diverifikasi. |
-| 6 | `resources/css/app.css` | **Styling / Design System** | Menyimpan variabel warna Adobe Spectrum, rasio kontras WCAG AA, dan aturan animasi. |
+| 4 | `app/Exports/LaporanExport.php` | **Export Layer** | Kelas ekspor `maatwebsite/excel` dengan `FromView`, `ShouldAutoSize`, dan `WithTitle`. |
+| 5 | `app/Models/Pimpinan.php` | **Model Layer** | Menyimpan data pimpinan desa (Nama Desa & Kepala Desa) untuk sertifikat. |
+| 6 | `app/Http/Controllers/User/KehadiranController.php` | **Controller Layer** | Halaman presensi mandiri peserta dengan validasi mode presensi (`presensi_by`). |
+| 7 | `resources/views/pdf/sertifikat.blade.php` | **Presentation / PDF** | Template sertifikat A4 Landscape berbasis *Absolute Inset Positioning* bebas terpotong. |
+| 8 | `app/Notifications/PendaftaranStatusNotification.php` | **Notification Layer** | Mengirimkan notifikasi database real-time ke dasbor peserta saat status diverifikasi. |
+| 9 | `resources/css/app.css` | **Styling / Design System** | Menyimpan variabel warna Adobe Spectrum, rasio kontras WCAG AA, dan aturan animasi. |
 
 ### :hammer: Build
 
@@ -378,7 +395,7 @@ Berikut adalah jawaban atas pertanyaan yang paling sering diajukan mengenai arsi
 > **A:** Engine DomPDF memiliki keterbatasan dalam memproses *page-break-inside* dan margin CSS3 modern pada dokumen berorientasi Landscape. Teknik layout biasa sering kali memicu pemotongan halaman secara acak yang menghasilkan halaman ke-2 kosong atau tanda tangan terpotong. Dengan *Absolute Positioning*, seluruh koordinat elemen visual dikunci secara presisi terhadap canvas A4, menjamin hasil cetak 100% konsisten dan sempurna dalam 1 halaman.
 
 **Q2: Bagaimana cara kerja fitur Presensi Mandiri oleh Peserta?** <br>
-> **A:** Admin dapat mengaktifkan opsi "Presensi Mandiri" pada pengaturan kelas pelatihan. Pada hari pelatihan berlangsung, tombol konfirmasi kehadiran akan otomatis aktif di dashboard peserta. Saat peserta mengklik tombol tersebut, sistem akan mencatat waktu kehadiran aktual (*timestamp*) ke dalam tabel `kehadiran` secara real-time.
+> **A:** Admin dapat mengaktifkan opsi "Presensi Mandiri" (`presensi_by = peserta`) pada pengaturan kelas pelatihan. Peserta kemudian dapat mengakses halaman **Kehadiran** melalui navigasi sidebar di dashboard mereka. Pada halaman tersebut, daftar pelatihan yang sudah disetujui akan ditampilkan beserta tombol **"Presensi Hadir"** yang hanya aktif jika admin mengaktifkan mode presensi mandiri. Jika mode presensi dikelola admin, peserta akan melihat keterangan informatif "Presensi dilakukan oleh Admin".
 
 **Q3: Apa yang terjadi apabila kuota kelas pelatihan sudah penuh saat ada peserta yang ingin mendaftar?** <br>
 > **A:** Sistem proteksi kuota otomatis di `PendaftaranService` akan memblokir pendaftaran baru dan tombol di frontend akan berubah menjadi badge `Sudah Penuh` (disabled). Namun, jika Admin menambah kuota kelas di dashboard atau jika ada peserta eksisting yang membatalkan pendaftarannya, status kelas akan otomatis kembali terbuka (*Publish*) tanpa perlu intervensi manual dari Admin.
@@ -397,6 +414,7 @@ Berikut adalah kumpulan referensi dokumentasi resmi dan sumber daya penting yang
 
 - **[Laravel 13 Documentation](https://laravel.com/docs/13.x)** — Framework inti PHP untuk backend development.
 - **[Alpine.js Documentation](https://alpinejs.dev/)** — Framework JavaScript reaktif dan ringan untuk interaktivitas UI & Bulk Actions.
+- **[Tailwind CSS v4 Documentation](https://tailwindcss.com/docs)** — Utility-first CSS framework untuk styling responsif dan konsisten.
 - **[Vite Documentation](https://vitejs.dev/)** — Next-generation frontend tooling & asset bundler.
 - **[DomPDF Documentation](https://github.com/dompdf/dompdf)** — HTML to PDF converter untuk generator sertifikat A4 Landscape.
 - **[Laravel Excel (Maatwebsite) Docs](https://docs.laravel-excel.com/)** — Library ekspor spreadsheet native `.xlsx` di Laravel.
