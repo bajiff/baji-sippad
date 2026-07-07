@@ -40,6 +40,34 @@ class DokumentasiController extends Controller
         return redirect()->route('admin.dokumentasi.index')->with('success', 'Dokumentasi berhasil ditambahkan.');
     }
 
+    public function edit(Dokumentasi $dokumentasi)
+    {
+        $pelatihans = Pelatihan::orderBy('judul')->get();
+        return view('admin.dokumentasi.edit', compact('dokumentasi', 'pelatihans'));
+    }
+
+    public function update(Request $request, Dokumentasi $dokumentasi)
+    {
+        $validated = $request->validate([
+            'pelatihan_id' => 'required|exists:pelatihan,id',
+            'foto' => 'nullable|image|max:5120',
+        ]);
+
+        if ($request->hasFile('foto')) {
+            if ($dokumentasi->foto_kegiatan) {
+                Storage::disk('public')->delete($dokumentasi->foto_kegiatan);
+            }
+            $validated['foto_kegiatan'] = $request->file('foto')->store('dokumentasi', 'public');
+        }
+
+        $dokumentasi->update([
+            'pelatihan_id' => $validated['pelatihan_id'],
+            'foto_kegiatan' => $validated['foto_kegiatan'] ?? $dokumentasi->foto_kegiatan,
+        ]);
+
+        return redirect()->route('admin.dokumentasi.index')->with('success', 'Dokumentasi berhasil diperbarui.');
+    }
+
     public function destroy(Dokumentasi $dokumentasi)
     {
         Storage::disk('public')->delete($dokumentasi->foto_kegiatan);
