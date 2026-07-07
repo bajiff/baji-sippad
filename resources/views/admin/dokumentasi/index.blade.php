@@ -40,43 +40,44 @@
                         </div>
                     </div>
                     
-                    @if(in_array($p->status, ['publish', 'closed', 'selesai']))
-                        @if($p->dokumentasi->count() >= 5)
-                            <div class="px-3 py-1.5 bg-yellow-50 border border-yellow-200 text-yellow-700 rounded text-xs font-medium">
-                                Maksimal 5 Foto (Penuh)
-                            </div>
-                        @else
-                            <form method="POST" action="{{ route('admin.dokumentasi.store') }}" enctype="multipart/form-data" class="flex items-center gap-2">
-                                @csrf
-                                <input type="hidden" name="pelatihan_id" value="{{ $p->id }}">
-                                <input type="file" name="foto" required accept="image/*" class="text-sm border border-[var(--color-border)] rounded px-2 py-1 max-w-[200px]">
-                                <button type="submit" class="px-3 py-1.5 bg-[var(--color-primary)] text-white text-sm rounded hover:bg-[var(--color-primary-hover)] whitespace-nowrap">Upload Foto</button>
-                            </form>
-                        @endif
-                    @else
-                        <div class="px-3 py-1.5 bg-red-50 border border-red-200 text-red-600 rounded text-xs font-medium">
-                            Harus di-publish terlebih dahulu untuk menambah foto
-                        </div>
-                    @endif
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    @forelse($p->dokumentasi as $d)
-                        <div class="relative group aspect-square bg-[var(--color-surface-1)] rounded overflow-hidden border border-[var(--color-border)]">
-                            <img src="{{ Storage::url($d->foto_kegiatan) }}" alt="Dokumentasi" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                                <a href="{{ route('admin.dokumentasi.edit', $d) }}" class="px-3 py-1 bg-yellow-500 text-white text-xs rounded hover:bg-yellow-600 font-medium">Edit</a>
-                                <form method="POST" action="{{ route('admin.dokumentasi.destroy', $d) }}" onsubmit="return confirm('Yakin hapus foto ini?')">
+                    @foreach($p->dokumentasi as $d)
+                        <div class="bg-[var(--color-surface-1)] rounded overflow-hidden border border-[var(--color-border)] flex flex-col">
+                            <div class="aspect-square w-full overflow-hidden bg-[var(--color-canvas)]">
+                                <img src="{{ Storage::url($d->foto_kegiatan) }}" alt="Dokumentasi" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-2 border-t border-[var(--color-border)] flex items-center justify-between gap-1 bg-[var(--color-surface-2)]">
+                                <a href="{{ route('admin.dokumentasi.edit', $d) }}" class="flex-1 text-center px-2 py-1 bg-[var(--color-link)] text-white text-[11px] rounded hover:opacity-90 font-medium transition-opacity">Edit</a>
+                                <form method="POST" action="{{ route('admin.dokumentasi.destroy', $d) }}" onsubmit="return confirm('Yakin hapus foto ini?')" class="flex-1 flex">
                                     @csrf @method('DELETE')
-                                    <button type="submit" class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 font-medium">Hapus</button>
+                                    <button type="submit" class="w-full px-2 py-1 bg-[var(--color-danger)] text-white text-[11px] rounded hover:opacity-90 font-medium transition-opacity">Hapus</button>
                                 </form>
                             </div>
                         </div>
-                    @empty
-                        <div class="col-span-full py-6 text-center text-sm text-[var(--color-ink-muted)] border-2 border-dashed border-[var(--color-border)] rounded">
-                            Belum ada foto dokumentasi.
+                    @endforeach
+
+                    @if(in_array($p->status, ['publish', 'closed', 'selesai']))
+                        @if($p->dokumentasi->count() < 5)
+                            <div class="bg-[var(--color-surface-1)] rounded overflow-hidden border-2 border-dashed border-[var(--color-border)] flex flex-col items-center justify-center p-3 text-center min-h-[160px]">
+                                <form method="POST" action="{{ route('admin.dokumentasi.store') }}" enctype="multipart/form-data" class="flex flex-col items-center justify-center gap-2 w-full">
+                                    @csrf
+                                    <input type="hidden" name="pelatihan_id" value="{{ $p->id }}">
+                                    <input type="file" name="foto" required accept="image/*" class="w-full text-[10px] border border-[var(--color-border)] rounded px-1 py-1 bg-[var(--color-canvas)]">
+                                    <button type="submit" class="w-full px-2 py-1.5 bg-[var(--color-primary)] text-white text-xs rounded hover:bg-[var(--color-primary-hover)] font-medium transition-colors">+ Upload Foto</button>
+                                </form>
+                            </div>
+                        @else
+                            <div class="bg-yellow-50 rounded overflow-hidden border border-yellow-200 flex flex-col items-center justify-center p-4 text-center min-h-[160px]">
+                                <span class="text-xs font-medium text-yellow-700">Maksimal 5 Foto (Penuh)</span>
+                            </div>
+                        @endif
+                    @else
+                        <div class="bg-red-50 rounded overflow-hidden border border-red-200 flex flex-col items-center justify-center p-4 text-center min-h-[160px]">
+                            <span class="text-xs font-medium text-red-600">Harus Publish untuk Upload</span>
                         </div>
-                    @endforelse
+                    @endif
                 </div>
             </div>
         @empty
