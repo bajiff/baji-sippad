@@ -210,28 +210,29 @@
         }
         /* Footer Signatures matching template style */
         .footer-table {
-            position: absolute;
-            bottom: 25px;
-            left: 0;
             width: 100%;
-            padding: 0 80px;
-            box-sizing: border-box;
-            z-index: 10;
+            margin-top: 25px;
+            border-collapse: collapse;
         }
         .footer-col {
             width: 50%;
             text-align: center;
-            vertical-align: bottom;
+            vertical-align: top;
+        }
+        .sig-label {
+            font-size: 13px;
+            color: #555555;
+            margin: 50px 0px;
         }
         .sig-name {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
             color: #111111;
-            margin-bottom: 3px;
         }
-        .sig-title {
-            font-size: 11px;
-            color: #555555;
+        .sig-name-underline {
+            border-bottom: 1px solid #111111;
+            display: inline-block;
+            padding-bottom: 1px;
         }
     </style>
 </head>
@@ -266,13 +267,23 @@
                 Atas partisipasi aktif dan keberhasilannya menyelesaikan pelatihan <span class="training-highlight">"{{ $kehadiran->pendaftaran->pelatihan->judul }}"</span> yang diselenggarakan oleh Sistem Pendaftaran Pelatihan Anak Desa (SIPPAD) pada tanggal {{ $kehadiran->pendaftaran->pelatihan->tanggal->format('d F Y') }} bertempat di {{ $kehadiran->pendaftaran->pelatihan->lokasi }} dengan narasumber<span class="training-highlight"> "{{ $kehadiran->pendaftaran->pelatihan->narasumber }}"</span>
             </div>
 
-            <!-- Ketua Pelaksana Section -->
-            <div style="margin-top: 25px; text-align: center;">
-                <div style="font-size: 13px; color: #555555; margin: 50px 0px;">Ketua Pelaksana</div>
-                <div style="font-size: 15px; font-weight: bold; color: #111111;">
-                    <span style="border-bottom: 1px solid #111111; display: inline-block; padding-bottom: 1px;">{{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ?? 'Ahmad Fauzi, S.T.' }}</span>
-                </div>
-            </div>
+            <!-- Signatures Section -->
+            <table class="footer-table" style="width: 100%; margin-top: 25px; border-collapse: collapse;">
+                <tr>
+                    <td class="footer-col" style="width: 50%; text-align: center; vertical-align: top;">
+                        <div class="sig-label" style="font-size: 13px; color: #555555; margin: 50px 0px;">Kepala {{ str_starts_with(strtolower($pimpinan->nama_desa ?? ''), 'desa') ? $pimpinan->nama_desa : 'Desa ' . ($pimpinan->nama_desa ?? 'Suranenggala Kidul') }}</div>
+                        <div class="sig-name" style="font-size: 15px; font-weight: bold; color: #111111;">
+                            <span class="sig-name-underline" style="border-bottom: 1px solid #111111; display: inline-block; padding-bottom: 1px;">{{ $pimpinan->nama_kepala_desa ?? 'Pemerintah Desa Suranenggala Kidul' }}</span>
+                        </div>
+                    </td>
+                    <td class="footer-col" style="width: 50%; text-align: center; vertical-align: top;">
+                        <div class="sig-label" style="font-size: 13px; color: #555555; margin: 50px 0px;">Ketua Pelaksana</div>
+                        <div class="sig-name" style="font-size: 15px; font-weight: bold; color: #111111;">
+                            <span class="sig-name-underline" style="border-bottom: 1px solid #111111; display: inline-block; padding-bottom: 1px;">{{ $kehadiran->pendaftaran->pelatihan->ketua_pelaksana ?? 'Ahmad Fauzi, S.T.' }}</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </body>
